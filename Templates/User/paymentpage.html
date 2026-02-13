@@ -1,0 +1,270 @@
+{% load static %}
+{% include 'User/userheader.html' %}
+
+<div class="payment-portal">
+	<div class="payment-card">
+		<div class="payment-header">
+			<div class="payment-title">
+				<h2>Payment Portal</h2>
+				<p>Complete your booking payment securely.</p>
+			</div>
+			<div class="payment-badge">Secure</div>
+		</div>
+
+		<div class="payment-body">
+			<div class="order-summary">
+				<h3>Order Summary</h3>
+				<div class="summary-row">
+					<span>Service</span>
+					<span>{{ booking.serviceid.servicename }}</span>
+				</div>
+				<div class="summary-row">
+					<span>Booked Date</span>
+					<span>{{ booking.bookingdate }}</span>
+				</div>
+				<div class="summary-row">
+					<span>Payment Date</span>
+					<span>{% now "j F, Y" %}</span>
+				</div>
+				<div class="summary-row">
+					<span>Total amount</span>
+					<span>₹{{ booking.serviceid.totalamount }}</span>
+				</div>
+				<div class="summary-total">
+					<span>Total</span>
+					<strong>₹{{ booking.serviceid.totalamount }}</strong>
+				</div>
+			</div>
+
+			<form class="payment-form" method="post" action="{% url 'pay' %}">
+				{% csrf_token %}
+
+				<h3>Card Details</h3>
+				<div class="form-grid">
+					<div class="form-group full">
+						<label for="cardName">Cardholder Name</label>
+						<input id="cardName" name="card_name" type="text" placeholder="Full name on card" required>
+					</div>
+
+					<div class="form-group full">
+						<label for="cardNumber">Card Number</label>
+						<input id="cardNumber" name="card_number" type="text" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456" required>
+					</div>
+
+					<div class="form-group">
+						<label for="expiry">Expiry</label>
+						<input id="expiry" name="expiry" type="text" inputmode="numeric" maxlength="5" placeholder="MM/YY" required>
+					</div>
+
+					<div class="form-group">
+						<label for="cvv">CVV</label>
+						<input id="cvv" name="cvv" type="password" inputmode="numeric" maxlength="4" placeholder="***" required>
+					</div>
+				</div>
+
+				<div class="form-group full">
+					<label for="upi">UPI ID (optional)</label>
+					<input id="upi" name="upi" type="text" placeholder="name@bank">
+				</div>
+				<input type="hidden" name="bookingid" value="{{booking.bookingid}}">
+				<input type="hidden" name="totalamount" value="{{booking.serviceid.totalamount}}">
+				<input type="hidden" name="paymentstatus" value="Paid">
+				<input type="hidden" name="paymentdate" value="{% now "Y-m-d" %}">
+				<div class="form-actions">
+					<button type="submit" class="btn-primary">Pay Now</button>
+					<a href="{% url 'mybookings' %}" class="btn-secondary">Cancel</a>
+				</div>
+
+				<p class="payment-note">
+					By proceeding, you agree to the payment terms. Your card details are encrypted.
+				</p>
+			</form>
+		</div>
+	</div>
+</div>
+
+<style>
+	.payment-portal {
+		min-height: calc(100vh - 120px);
+		padding: 40px 20px 60px;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		background: linear-gradient(180deg, #f8f9ff 0%, #ffffff 100%);
+	}
+
+	.payment-card {
+		width: 100%;
+		max-width: 900px;
+		background: #ffffff;
+		border-radius: 16px;
+		box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+		border: 1px solid #eef2ff;
+		overflow: hidden;
+	}
+
+	.payment-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 28px 32px;
+		background: linear-gradient(135deg, #4f46e5 0%, #6366f1 60%, #818cf8 100%);
+		color: #ffffff;
+	}
+
+	.payment-title h2 {
+		margin: 0 0 6px;
+		font-size: 24px;
+		font-weight: 700;
+	}
+
+	.payment-title p {
+		margin: 0;
+		opacity: 0.9;
+	}
+
+	.payment-badge {
+		background: rgba(255, 255, 255, 0.18);
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		padding: 8px 14px;
+		border-radius: 999px;
+		font-size: 13px;
+		font-weight: 600;
+	}
+
+	.payment-body {
+		display: grid;
+		grid-template-columns: 1fr 1.2fr;
+		gap: 24px;
+		padding: 28px 32px 36px;
+	}
+
+	.order-summary {
+		background: #f8fafc;
+		border-radius: 14px;
+		padding: 24px;
+		border: 1px solid #e2e8f0;
+	}
+
+	.order-summary h3 {
+		margin: 0 0 16px;
+		font-size: 18px;
+	}
+
+	.summary-row,
+	.summary-total {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 10px 0;
+		border-bottom: 1px dashed #e2e8f0;
+		font-size: 14px;
+	}
+
+	.summary-total {
+		border-bottom: none;
+		padding-top: 14px;
+		font-size: 16px;
+	}
+
+	.payment-form h3 {
+		margin: 0 0 16px;
+		font-size: 18px;
+	}
+
+	.form-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
+	}
+
+	.form-group {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.form-group.full {
+		grid-column: 1 / -1;
+	}
+
+	label {
+		font-size: 13px;
+		color: #334155;
+		font-weight: 600;
+	}
+
+	input {
+		padding: 12px 14px;
+		border-radius: 10px;
+		border: 1px solid #cbd5f5;
+		background: #ffffff;
+		font-size: 14px;
+		transition: border 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	input:focus {
+		outline: none;
+		border-color: #6366f1;
+		box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+	}
+
+	.form-actions {
+		display: flex;
+		gap: 12px;
+		margin-top: 18px;
+	}
+
+	.btn-primary,
+	.btn-secondary {
+		padding: 12px 18px;
+		border-radius: 10px;
+		font-weight: 600;
+		font-size: 14px;
+		text-decoration: none;
+		text-align: center;
+	}
+
+	.btn-primary {
+		border: none;
+		background: #4f46e5;
+		color: #ffffff;
+		cursor: pointer;
+	}
+
+	.btn-primary:hover {
+		background: #4338ca;
+	}
+
+	.btn-secondary {
+		background: #eef2ff;
+		color: #4338ca;
+		border: 1px solid #c7d2fe;
+	}
+
+	.payment-note {
+		margin: 12px 0 0;
+		font-size: 12px;
+		color: #64748b;
+	}
+
+	@media (max-width: 900px) {
+		.payment-body {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.payment-header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 12px;
+		}
+
+		.form-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+
+{% include 'User/userfooter.html' %}

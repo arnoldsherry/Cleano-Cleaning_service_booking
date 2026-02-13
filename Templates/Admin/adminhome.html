@@ -1,0 +1,187 @@
+{% include 'Admin/adminheader.html' %}
+{% load static %}
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+	:root {
+		--ink: #1b1f2a;
+		--muted: #5d6b82;
+		--accent: #ff7a59;
+		--accent-dark: #e85a3a;
+		--glow: rgba(255, 122, 89, 0.35);
+		--panel: #ffffff;
+		--wash: #f5f7fb;
+	}
+
+	.admin-hero {
+		position: relative;
+		overflow: hidden;
+		padding: 48px 24px;
+	}
+
+	.admin-hero::before,
+	.admin-hero::after {
+		content: '';
+		position: absolute;
+		border-radius: 999px;
+		background: radial-gradient(circle at 30% 30%, #c2d8ff, transparent 60%);
+		opacity: 0.7;
+		filter: blur(2px);
+		z-index: 0;
+	}
+
+	.admin-hero::before {
+		width: 360px;
+		height: 360px;
+		top: -120px;
+		left: -80px;
+	}
+
+	.admin-hero::after {
+		width: 420px;
+		height: 420px;
+		bottom: -160px;
+		right: -120px;
+		background: radial-gradient(circle at 70% 30%, #ffd2c7, transparent 60%);
+	}
+
+	.welcome-card {
+		position: relative;
+		z-index: 1;
+		border: 0;
+		border-radius: 20px;
+		background: var(--panel);
+		box-shadow: 0 24px 60px rgba(18, 26, 44, 0.12);
+		padding: 36px 32px;
+		animation: cardFloat 800ms ease-out;
+	}
+
+	.welcome-tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 6px 14px;
+		border-radius: 999px;
+		background: rgba(255, 122, 89, 0.12);
+		color: var(--accent-dark);
+		font-family: 'Space Grotesk', sans-serif;
+		font-size: 12px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		font-weight: 600;
+	}
+
+	.welcome-title {
+		font-family: 'Playfair Display', serif;
+		font-size: clamp(28px, 4vw, 40px);
+		color: var(--ink);
+		margin: 16px 0 10px;
+	}
+
+	.welcome-subtitle {
+		font-family: 'Space Grotesk', sans-serif;
+		color: var(--muted);
+		font-size: 15px;
+		line-height: 1.6;
+		max-width: 540px;
+		margin: 0 auto 20px;
+	}
+
+	.welcome-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		justify-content: center;
+	}
+
+	.cta-primary,
+	.cta-ghost {
+		font-family: 'Space Grotesk', sans-serif;
+		font-weight: 600;
+		border-radius: 12px;
+		padding: 10px 18px;
+		border: none;
+		cursor: pointer;
+		transition: transform 180ms ease, box-shadow 180ms ease;
+	}
+
+	.cta-primary {
+		background: var(--accent);
+		color: #fff;
+		box-shadow: 0 12px 26px var(--glow);
+	}
+
+	.cta-primary:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 16px 30px rgba(255, 122, 89, 0.45);
+	}
+
+	.cta-ghost {
+		background: var(--wash);
+		color: var(--ink);
+	}
+
+	.cta-ghost:hover {
+		transform: translateY(-2px);
+	}
+
+	.stats-row {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+		gap: 16px;
+		margin-top: 28px;
+	}
+
+	.stat-pill {
+		background: #fff;
+		border-radius: 14px;
+		padding: 14px;
+		text-align: center;
+		border: 1px solid #eef1f7;
+		font-family: 'Space Grotesk', sans-serif;
+		animation: fadeUp 900ms ease-out;
+	}
+
+	.stat-pill strong {
+		display: block;
+		color: var(--ink);
+		font-size: 18px;
+	}
+
+	.stat-pill span {
+		color: var(--muted);
+		font-size: 12px;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+
+	@keyframes cardFloat {
+		from { opacity: 0; transform: translateY(18px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	@keyframes fadeUp {
+		from { opacity: 0; transform: translateY(12px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+</style>
+
+<main class="content admin-hero">
+	<div class="row">
+		<div class="col-lg-12 mx-auto">
+			<div class="welcome-card text-center">
+				<div class="welcome-tag">Admin Control</div>
+				<h1 class="welcome-title">Welcome admin</h1>
+				<p class="welcome-subtitle">
+					You are in command. Track activity, monitor service quality, and keep the operation polished.
+				</p>
+				<div class="stats-row">
+					<div class="stat-pill"><strong>{{revenue}}</strong><span>Total revenue</span></div>
+					<div class="stat-pill"><strong>{{total_bookings}}</strong><span>Total Bookings</span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+{% include 'Admin/adminfooter.html' %}

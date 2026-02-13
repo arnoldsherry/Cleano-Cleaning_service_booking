@@ -1,0 +1,67 @@
+{% load static %}
+{% include 'Admin/adminheader.html' %}
+<script src="{% static 'jquery-3.7.1.min.js' %}"></script>
+<script>
+$(document).ready(function() {
+    // Setup the CSRF token for AJAX requests
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": '{{ csrf_token }}' }
+    });
+
+    // When a district is selected
+    $("#districtid").change(function() {
+        var districtid = $(this).val();
+        
+        // AJAX POST request to fetch locations
+        $.ajax({
+            type: "POST",
+            url: '{% url "filllocation" %}',
+            data: { did: districtid },
+            dataType: "json",
+            success: function(data) {
+                // Empty the locations table
+                $('#locations').empty();
+
+                // Populate the locations table with the new data
+                $.each(data, function(key, val) {
+                    var id = val.locationid;
+                    var deleteurl = '{% url "deletelocation" 0 %}'.replace('0', id);
+                    var editurl = '{% url "editlocation" 0 %}'.replace('0', id);
+                    var row = "<tr>" +
+                        "<td>" + (key + 1) + "</td>" +
+                        "<td>" + val.locationname + "</td>" +
+                        "<td><a href='" + deleteurl + "' class='btn btn-danger btn-sm'>Delete</a></td>" +
+                        "<td><a href='" + editurl + "' class='btn btn-primary btn-sm'>Edit</a></td>" +
+                    "</tr>";
+                    $('#locations').append(row);
+                });
+            }
+        });
+    });
+});
+</script>
+<div class="card">
+                <h5 class="card-header">Locations</h5>
+                <div class="card-body">
+                  <select id="districtid" class="form-select">
+                    <option value selected disabled>----Select District----</option>
+                    {% for d in districts %}
+                    <option value="{{d.districtid}}">{{d.districtname}}</option>
+                    {% endfor %}
+                  </select>
+                <div class="table-responsive text-nowrap">
+                  <table class="table">
+                    <thead class="table-light">
+                      <tr>
+                        <th>#</th>
+                        <th>Location Name</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0" id="locations">
+                       
+                    </tbody>
+                  </table>
+                </div>
+              </div>

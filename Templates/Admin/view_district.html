@@ -1,0 +1,31 @@
+{% load static %}
+{% include 'Admin/adminheader.html' %}
+<div class="card">
+                <h5 class="card-header">Light Table head</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table">
+                    <thead class="table-light">
+                      <tr>
+                        <th>#</th>
+                        <th>District Name</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        {% for d in dis %}
+                      <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{d.districtname}}</td>
+                        <td><a href="{% url 'editdistrict' districtid=d.districtid %}" 
+                          onclick="return confirm('Are you sure you want to edit this district?')" 
+                          class="btn btn-warning">Edit</a></td>
+                         <td><a href="{% url 'deletedistrict' districtid=d.districtid %}" 
+                          onclick="return confirm('Are you sure you want to delete this district?')" 
+                          class="btn btn-danger">Delete</a></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>

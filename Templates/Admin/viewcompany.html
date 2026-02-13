@@ -1,0 +1,167 @@
+{% load static %}
+{% include 'Admin/adminheader.html' %}
+
+<div class="card">
+  <div class="table-responsive text-nowrap">
+    <h5 class="card-header">Company Requests (In Queue)</h5>
+    <table class="table">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Company Name</th>
+          <th>contact</th>
+          <th>location</th>
+          <th>city</th>
+          <th>state</th>
+          <th>street</th>
+          <th>username</th>
+          <th>description</th>
+          <th>logo</th>
+          <th>status</th>
+          <th>Accept</th>
+          <th>Reject</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        {% for c in com %}
+          {% if c.status == "In Queue" %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ c.compname }}</td>
+              <td>{{ c.contact }}</td>
+              <td>{{ c.locationid.locationname }}</td>
+              <td>{{ c.city }}</td>
+              <td>{{ c.state }}</td>
+              <td>{{ c.street }}</td>
+              <td>{{ c.username }}</td>
+              <td>{{ c.description }}</td>
+              <td>
+                  <img src="/media/{{c.image}}" alt="" style="max-height:60px;max-width:80px;"/>
+              
+              </td>
+              <td>{{ c.status }}</td>
+              <td>
+              <div>
+                <button class="btn-warning"><a href="{% url 'acceptcompany' id=c.loginid_id %}" onclick="return confirm('Are you sure you want to accept this company?')" class="btn btn-warning">Accept</a></button>
+              </div>
+              </td>
+              <td>
+                <div>
+                <button class="btn-danger"><a href="{% url 'rejectcompany' id=c.loginid_id %}" onclick="return confirm('Are you sure you want to reject this company?')" class="btn btn-danger">Reject</a></button>
+                </div>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="table-responsive text-nowrap">
+    <h5 class="card-header">Accepted Companies</h5>
+    <table class="table">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Company Name</th>
+          <th>contact</th>
+          <th>location</th>
+          <th>city</th>
+          <th>state</th>
+          <th>street</th>
+          <th>username</th>
+          <th>description</th>
+          <th>logo</th>
+          <th>status</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        {% for c in com %}
+          {% if c.status == "Accepted" %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ c.compname }}</td>
+              <td>{{ c.contact }}</td>
+              <td>{{ c.locationid.locationname }}</td>
+              <td>{{ c.city }}</td>
+              <td>{{ c.state }}</td>
+              <td>{{ c.street }}</td>
+              <td>{{ c.username }}</td>
+              <td>{{ c.description }}</td>
+              <td>
+                  <img src="/media/{{c.image}}" alt="" style="max-height:100px;max-width:100px;"/>
+                
+              </td>
+              <td>{{ c.status }}</td>
+              <td>
+                <div>
+                <button class="btn-danger"><a href="{% url 'deletecompany' cid=c.loginid_id %}">Delete</a></button>
+                </div>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="table-responsive text-nowrap">
+    <h5 class="card-header">Rejected Companies</h5>
+    <table class="table">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Company Name</th>
+          <th>contact</th>
+          <th>location</th>
+          <th>city</th>
+          <th>state</th>
+          <th>street</th>
+          <th>username</th>
+          <th>description</th>
+          <th>logo</th>
+          <th>status</th>
+          <th>Accept</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        {% for c in com %}
+          {% if c.status == "Rejected" %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ c.compname }}</td>
+              <td>{{ c.contact }}</td>
+              <td>{{ c.locationid.locationname }}</td>
+              <td>{{ c.city }}</td>
+              <td>{{ c.state }}</td>
+              <td>{{ c.street }}</td>
+              <td>{{ c.username }}</td>
+              <td>{{ c.description }}</td>
+              <td>
+                  <img src="/media/{{c.image}}" alt="" style="max-height:100px;max-width:100px;"/>
+                
+              </td>
+              <td>{{ c.status }}</td>
+               <td>
+                <div>
+                <button class="btn-warning"><a href="{% url 'acceptcompany' id=c.loginid_id %}">Accept</a></button>
+                </div>
+              </td>
+              <td>
+                <div>
+                <button class="btn-danger"><a href="{% url 'deletecompany' cid=c.loginid_id %}">Delete</a></button>
+                </div>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

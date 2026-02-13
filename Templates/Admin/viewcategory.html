@@ -1,0 +1,33 @@
+{% load static %}
+{% include 'Admin/adminheader.html' %}
+<div class="card">
+                <h5 class="card-header">Light Table head</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table">
+                    <thead class="table-light">
+                      <tr>
+                        <th>#</th>
+                        <th>Category Name</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        {% for d in cat %}
+                      <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{d.categoryname}}</td>
+
+                        <td><a href="{%url 'editcategory' cid=d.categoryid %}" 
+                          onclick="return confirm('Are you sure you want to edit this category?')" 
+                          class="btn btn-warning">Edit</a></td>
+
+                         <td><a href="{%url 'deletecategory' cid=d.categoryid %}" 
+                          onclick="return confirm('Are you sure you want to delete this category?')" 
+                          class="btn btn-danger">Delete</a></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>

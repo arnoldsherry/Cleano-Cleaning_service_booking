@@ -1,0 +1,184 @@
+{% load static %}
+{% include "Admin/adminheader.html" %}
+<br><br><br>
+<!-- Main-body start -->
+<div class="main-body">
+    <div class="page-wrapper">
+        <!-- Page-body start -->
+        <div class="page-body">
+            <!-- Basic table card start -->
+            {% if report_data %}
+            <div class="card">
+                <div class="card-header">
+                    <h5>Category-wise Service Purchases</h5>
+                </div>
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>SI. No</th>
+                                    <th>Category</th>
+                                    <th>Total Services Purchased</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in report_data %}
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td>{{ entry.categoryname }}</td>
+                                    <td>{{ entry.total_services }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <br><br><br>
+            <div class="row">
+            <div class="col-lg-12 mx-auto">
+            <div class="card border-0 shadow-lg p-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center chart-title">Category-wise Service Count</h5>
+                    <div style="width: 300px; height: 300px;">
+                        <canvas id="pie_chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+{{ labels|json_script:"labels-data" }}
+{{ data|json_script:"counts-data" }}
+
+<!-- Chart.js and Plugin Integration -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script> 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var labelsElement = document.getElementById('labels-data');
+        var dataElement = document.getElementById('counts-data');
+        
+        var labels = labelsElement ? JSON.parse(labelsElement.textContent) : [];
+        var data = dataElement ? JSON.parse(dataElement.textContent) : [];
+        
+        if (!data.length) return;
+        
+        var ctx = document.getElementById('pie_chart').getContext('2d');
+
+        var colors = [
+            'rgba(65, 105, 225, 0.8)',   // Royal Blue
+            'rgba(0, 128, 128, 0.8)',    // Teal
+            'rgba(255, 87, 51, 0.8)',    // Deep Orange
+            'rgba(106, 13, 173, 0.8)',   // Dark Purple
+            'rgba(218, 165, 32, 0.8)',   // Gold
+            'rgba(46, 139, 87, 0.8)'     // Emerald Green
+        ];
+
+        var borderColors = colors.map(color => color.replace('0.8', '1'));
+
+        var total = data.reduce((acc, val) => acc + val, 0);
+
+        var categoryChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Services',
+                    data: data,
+                    backgroundColor: colors,
+                    borderColor: borderColors,
+                    borderWidth: 2,
+                    hoverBackgroundColor: 'rgba(0, 0, 0, 0.5)',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
+                            },
+                            color: '#333'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                var value = tooltipItem.raw;
+                                var percentage = ((value / total) * 100).toFixed(2) + '%';
+                                return tooltipItem.label + ': ' + value + ' (' + percentage + ')';
+                            }
+                        }
+                    },
+                    datalabels: {
+                        color: '#fff',
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        formatter: function (value) {
+                            var percentage = ((value / total) * 100).toFixed(2) + '%';
+                            return percentage;
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    });
+</script>
+
+<style>.content {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+  
+    margin-left: 0; /* Remove margin-left to prevent shifting */
+}
+
+.card {
+    z-index: 10;
+    position: relative;
+    width: 200%;
+    height: 80%;
+
+    max-width: 600px; /* Limits width for better design */
+    padding: 30px;
+    text-align: center; /* Ensures text inside is centered */
+}
+
+@media (max-width: 992px) { 
+    .content {
+        margin-left: 0;
+    }
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 600px;
+}
+
+.chart-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #2c3e50; /* Professional dark blue-gray */
+}
+
+canvas {
+    max-width: 800px !important;
+    max-height: 600px !important;
+}
+</style>

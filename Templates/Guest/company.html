@@ -1,0 +1,194 @@
+{% load static %}
+{% include 'Guest/guestheader.html' %}
+<script src="{% static 'admin/jquery-3.7.1.min.js' %}"></script>
+
+<script>
+
+$(document).ready(function() {
+alert('hii');
+    $.ajaxSetup({
+        headers: {"X-CSRFToken": '{{ csrf_token }}'}
+    });
+
+    $("#district").change(function() {
+        var districtid = $(this).val();
+alert('districtid');
+
+        $.ajax({
+            type: "POST",
+            url: '{% url "filllocation" %}',
+            data: {districtid: districtid},
+            dataType: "json",
+            success: function(data) {
+                $('#location').empty();
+alert('location');
+
+                // Populate table with new data
+                $.each(data, function(key, val) {
+                    var row = "<option value='" + val.locationid + "'>" + val.locationname + "</option>";
+                    $('#location').append(row);
+                });
+            }
+        });
+    });
+});
+
+</script>
+<br><br><br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Registration</title>
+    <style>
+        /* Container Styling */
+        .form-container {
+            background-color:black;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Form Title */
+        .form-title {
+            text-align: center;
+            font-size: 26px;
+            color: #4a90e2;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Input and Select Fields */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px black;
+            width: 100%;
+            transition: border-color 0.3s;
+        }
+
+        /* Focus Effect on Input Fields */
+        .form-control:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+
+        /* Submit Button */
+        .btnRegister {
+            background-color: #4a90e2;
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        /* Button Hover Effect */
+        .btnRegister:hover {
+            background-color: #357ab7;
+        }
+
+        /* Placeholder Text Styling */
+        .form-control::placeholder {
+            color: #aaa;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            .form-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <br><br>
+<div class="col-md-6 mx-auto">
+    <form action="{% url 'companyreg' %}" method="POST" class="form-container" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <h2 class="form-title">Company Registration</h2>
+
+         <!-- company naem -->
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter Company name" name="compname" id="compname" required>
+        </div>
+
+         <!-- user naem -->
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter user name" name="username" id="username" required>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Enter Password" name="password" id="password" required>
+        </div>
+        <!-- Email -->
+        <div class="form-group">
+            <input type="email" class="form-control" placeholder="Enter Email" name="email" id="email" required>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+            <input type="number" class="form-control" placeholder="Enter Phone Number" name="contact" id="contact" required>
+        </div>
+
+        <!-- city -->
+     <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter city" name="city" id="city" required>
+        </div>
+
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter state" name="state" id="state" required>
+        </div>
+
+         <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter street" name="street" id="street" required>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+            <select name="locationid" id="locationid" class="form-control" required>
+                                <option value="">----- Select Location -----</option>
+                                {% for l in locs %}
+                                <option value="{{l.locationid}}">{{l.locationname}}</option>
+                                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <input type="file" class="form-control"  name="image" id="image" required>
+        </div>
+
+         <div class="form-group">
+            <input type="text" class="form-control" placeholder="Enter description" name="description" id="description" required>
+        </div>
+       
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <input type="submit" class="btnRegister" value="Register">
+        </div>
+    </form>
+    <br><br>
+</div>
+
+</body>
+</html>
+{% include 'Guest/guestfooter.html' %}

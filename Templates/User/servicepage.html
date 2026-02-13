@@ -1,0 +1,278 @@
+{% load static %}
+{% include 'User/userheader.html' %}
+<head>
+    <style>
+        /* Basic Styling */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+ 
+ .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px;
+  display: flex;
+  gap: 30px;
+}
+
+/* Columns (image smaller on the left, details on the right) */
+.left-column {
+  width: 40%;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.right-column {
+  width: 60%;
+}
+
+/* Left Column Image - smaller and inline (not absolutely positioned) */
+.left-column img,
+.img {
+  width: 90%;
+  max-width: 420px;
+  height: auto;
+  position: relative;
+  margin: 10px 0;
+  display: block;
+  opacity: 1;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.left-column img:hover,
+.img:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+/* Product Description */
+.product-description {
+  border-bottom: 1px solid #E1E8EE;
+  margin-bottom: 20px;
+}
+.product-description span {
+  font-size: 12px;
+  color: #358ED7;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.product-description h1 {
+  font-weight: 300;
+  font-size: 52px;
+  color: #43484D;
+  letter-spacing: -2px;
+}
+.product-description p {
+  font-size: 16px;
+  font-weight: 300;
+  color: #86939E;
+  line-height: 24px;
+}
+/* Cable Configuration */
+.cable-choose {
+  margin-bottom: 20px;
+}
+ 
+.cable-choose button {
+  border: 2px solid #E1E8EE;
+  border-radius: 6px;
+  padding: 13px 20px;
+  font-size: 14px;
+  color: #5E6977;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all .5s;
+}
+ 
+.cable-choose button:hover,
+.cable-choose button:active,
+.cable-choose button:focus {
+  border: 2px solid #86939E;
+  outline: none;
+}
+ 
+.cable-config {
+  border-bottom: 1px solid #E1E8EE;
+  margin-bottom: 20px;
+}
+ 
+.cable-config a {
+  color: #358ED7;
+  text-decoration: none;
+  font-size: 12px;
+  position: relative;
+  margin: 10px 0;
+  display: inline-block;
+}
+ 
+.cable-config a:before {
+  content: "?";
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  border: 2px solid rgba(53, 142, 215, 0.5);
+  display: inline-block;
+  text-align: center;
+  line-height: 16px;
+  opacity: 0.5;
+  margin-right: 5px;
+}
+/* Product Price */
+.product-price {
+  display: flex;
+  align-items: center;
+}
+ 
+.product-price span {
+  font-size: 26px;
+  font-weight: 300;
+  color: #43474D;
+  margin-right: 20px;
+}
+ 
+.cart-btn {
+  display: inline-block;
+  background-color: #7DC855;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 12px 30px;
+  transition: all .5s;
+}
+.cart-btn:hover {
+  background-color: #64af3d;
+}
+/* Delivery date row */
+.delivery-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.delivery-row label {
+  white-space: nowrap;
+  font-weight: 500;
+  margin: 0;
+  min-width: 260px;
+  color: #333;
+}
+.delivery-input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 220px;
+}
+@media (max-width: 576px) {
+  .delivery-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .delivery-row label {
+    min-width: 0;
+    margin-bottom: 8px;
+  }
+  .delivery-input {
+    width: 100%;
+  }
+}
+    </style>
+    
+</head>
+<main class="container">
+ {% for s in services %}
+  <!-- Left Column / Service Image -->
+  <div class="left-column">
+    <img src="/media/{{s.image}}" alt="{{ s.servicename }}" class="image">
+  </div>
+
+  <!-- Right Column (details) -->
+  <div class="right-column">
+    <!-- Product Description -->
+    <div class="product-description">
+      <h1>{{ s.servicename }}</h1>
+      <h2>{{ s.compid.compname }}</h2>
+      <p>{{ s.description }}</p>
+    </div>
+
+    <!-- Product Configuration (placeholder) -->
+    <div class="product-configuration">
+      <!-- configuration controls could go here -->
+      <form class="delivery-form" action="{% url 'bookservice' %}" method="post">
+        {% csrf_token %}
+        <div class="delivery-row">
+          <label for="bookingdate">Enter date of delivery of service</label>
+          <input type="date" id="bookingdate" name="bookingdate" class="delivery-input" required>
+          <span id="dateError" style="color: red; font-size: 12px; display: none; margin-top: 5px;">Please select a date from today onwards</span>
+          <input type="hidden" id="bookingstatus" name="bookingstatus" value="Requested" required>
+          <input type="hidden" id="serviceid" name="serviceid" value="{{ s.serviceid }}" required>
+        </div>
+    </div>
+
+    <!-- Product Pricing -->
+    <div class="product-price">
+      <span>₹{{ s.totalamount }}</span>
+      <input type="submit" class="cart-btn" value="Book service">
+    </form>
+    </div>
+  </div>
+  {% endfor %}
+</main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const bookingDateInput = document.getElementById('bookingdate');
+    const dateError = document.getElementById('dateError');
+    const submitBtn = document.querySelector('.cart-btn');
+    const form = document.querySelector('.delivery-form');
+    
+    // Set minimum date to today
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const minDate = `${year}-${month}-${day}`;
+    bookingDateInput.setAttribute('min', minDate);
+    
+    // Validate on change
+    bookingDateInput.addEventListener('change', function() {
+      const selectedDate = new Date(this.value);
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      
+      if (selectedDate < currentDate) {
+        dateError.style.display = 'block';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+      } else {
+        dateError.style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        submitBtn.style.cursor = 'pointer';
+      }
+    });
+    
+    // Prevent form submission with past date
+    form.addEventListener('submit', function(e) {
+      const selectedDate = new Date(bookingDateInput.value);
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      
+      if (selectedDate < currentDate) {
+        e.preventDefault();
+        dateError.style.display = 'block';
+        alert('Please select a date from today onwards');
+      }
+    });
+  });
+</script>
+
+{% include 'User/userfooter.html' %}

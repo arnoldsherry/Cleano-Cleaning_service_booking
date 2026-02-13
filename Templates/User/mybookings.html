@@ -1,0 +1,175 @@
+{% load static %}
+{% include 'User/userheader.html' %}
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="page-header">
+      <h3 class="page-title">Shop Request View</h3>
+      
+    </div>
+    
+    <div class="row">
+      <div class="col-lg-19 grid-margin stretch-card">
+        <div class="card" style="overflow-x: auto;">
+          <div class="card-body" style="overflow-x: auto;">
+            <h4 class="card-title"> Accepted Bookings Table</h4>
+
+            <div class="table-responsive" style="overflow-x: auto;">
+              <table class="table table-bordered text-nowrap">
+                <thead>
+                  <tr>
+                    <th>Sl No.</th>
+                    <th>Service Name</th>
+                    <th>Booking date</th>
+                    <th>Booking Status</th>
+                    <th>Service Image</th>
+                    <th>Pay</th>
+                    <th>Cancel</th>
+
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% with counter=0 %}
+                  {% for s in bookings %}
+                    {% if s.bookingstatus == "Accepted" %}  
+                  {% with counter=counter|add:1 %}
+                  <tr>
+                    <td>{{ counter }}</td>
+                    <td>{{ s.serviceid.servicename }}</td>
+                    <td>{{ s.bookingdate }}</td>
+                    <td>{{ s.bookingstatus }}</td>
+                    <td><img src="/media/{{s.serviceid.image}}" style="width: 50px;height:70px;"></td>
+                    <!-- Accept Button -->
+                    <td>
+                      <a href="{% url 'paymentpage' s.bookingid %}" class="btn btn-outline-success btn-sm"
+                      onclick="return confirm('Are you sure you want to pay for this booking?');">
+                        Pay
+                      </a>
+                    </td>
+                    <!-- Reject Button -->
+                    <td>
+                      <a href="{% url 'cancelbooking' s.bookingid %}"
+                         class="btn btn-outline-danger btn-sm"
+                         onclick="return confirm('Are you sure you want to cancel this booking?');">
+                        Cancel
+                      </a>
+                    </td>
+                  </tr>
+                  {% endwith %}
+                  {% endif %}
+                  {% endfor %}
+                  {% endwith %}
+                </tbody>
+
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-19 grid-margin stretch-card">
+        <div class="card" style="overflow-x: auto;">
+          <div class="card-body" style="overflow-x: auto;">
+            <h4 class="card-title">Requested Bookings Table</h4>
+
+            <div class="table-responsive" style="overflow-x: auto;">
+              <table class="table table-bordered text-nowrap">
+                <thead>
+                  <tr>
+                    <th>Sl No.</th>
+                    <th>Service Name</th>
+                    <th>Booking date</th>
+                    <th>Booking Status</th>
+                    <th>Service Image</th>
+                    <th>Cancel</th>
+
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% with counter=0 %}
+                  {% for s in bookings %}
+                  {% if s.bookingstatus == "Requested" %}
+                  {% with counter=counter|add:1 %}
+                  <tr>
+                    <td>{{ counter }}</td>
+                    <td>{{ s.serviceid.servicename }}</td>
+                    <td>{{ s.bookingdate }}</td>
+                    <td>{{ s.bookingstatus }}</td>
+                    <td><img src="/media/{{s.serviceid.image}}" style="width: 50px;height:70px;"></td>
+                    <!-- Accept Button -->
+                    <!-- Reject Button -->
+                    <td>
+                      <a href="{% url 'cancelbooking' s.bookingid %}"
+                         class="btn btn-outline-danger btn-sm"
+                         onclick="return confirm('Are you sure you want to cancel this booking?');">
+                        Cancel
+                      </a>
+                    </td>
+                  </tr>
+                  {% endwith %}
+                  {% endif %}
+                  {% endfor %}
+                  {% endwith %}
+                </tbody>
+
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-19 grid-margin stretch-card">
+        <div class="card" style="overflow-x: auto;">
+          <div class="card-body" style="overflow-x: auto;">
+            <h4 class="card-title">Rejected Bookings Table</h4>
+
+            <div class="table-responsive" style="overflow-x: auto;">
+              <table class="table table-bordered text-nowrap">
+                <thead>
+                  <tr>
+                    <th>Sl No.</th>
+                    <th>Service Name</th>
+                    <th>Booking date</th>
+                    <th>Booking Status</th>
+                    <th>Service Image</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% with counter=0 %}
+                  {% for s in bookings %}
+                  {% if s.bookingstatus == "Rejected" %}
+                  {% with counter=counter|add:1 %}
+                  <tr>
+                    <td>{{ counter }}</td>
+                    <td>{{ s.serviceid.servicename }}</td>
+                    <td>{{ s.bookingdate }}</td>
+                    <td>{{ s.bookingstatus }}</td>
+                    <td><img src="/media/{{s.serviceid.image}}" style="width: 50px;height:70px;"></td>
+                    <!-- Accept Button -->
+                    <!-- Reject Button -->
+                    <td>
+                      <a href="{% url 'deletebooking' s.bookingid %}" class="btn btn-outline-danger btn-sm" 
+                      onclick="return confirm('Are you sure you want to delete this booking?');">Delete</a>
+                    </td>
+                  </tr>
+                  {% endwith %}
+                  {% endif %}
+                  {% endfor %}
+                  {% endwith %}
+                </tbody>
+
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+{% include 'User/userfooter.html' %}

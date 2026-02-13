@@ -1,0 +1,88 @@
+{% load static %}
+{% include "Admin/adminheader.html" %}
+<br><br><br>
+<!-- Main-body start -->
+<div class="main-body">
+    <div class="page-wrapper">
+        <!-- Page-body start -->
+        <div class="page-body">
+            <!-- Basic table card start -->
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5 style="font-size: 24px; font-weight: bold; color: #000000; text-transform: uppercase; letter-spacing: 1px;">
+                        <i class="fa fa-file-invoice-dollar"></i> Datewise Booking Report
+                    </h5>
+                </div>
+                <div class="card-block">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group row justify-content-center align-items-center">
+                            <label class="col-sm-2 col-form-label text-right">From Date:</label>
+                            <div class="col-sm-3">
+                                <input type="date" class="form-control" name="fromDate" style="font-size: 18px; padding: 8px;"
+                                       value="{{ from_date }}" required>
+                            </div>
+                            <label class="col-sm-2 col-form-label text-right">To Date:</label>
+                            <div class="col-sm-3">
+                                <input type="date" class="form-control" name="toDate" style="font-size: 18px; padding: 8px;"
+                                       value="{{ to_date }}" required>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-success" style="font-size: 18px; padding: 10px 20px;">
+                                Show Booking Details
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+<br><br>
+            {% if report_data %}
+            <div class="card">
+                <div class="card-header">
+                    <h5>Report from {{ from_date }} to {{ to_date }}</h5>
+                </div>
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>SI. No</th>
+                                    <th>Customer Name</th>
+                                    <th>Service Name</th>
+                                    <th>Company Name</th>
+                                    <th>Booking Date</th>
+                                    <th>Payment Date</th>
+                                    <th>Payment Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in report_data %}
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td>{{ entry.customername }}</td>
+                                    <td>{{ entry.servicename }}</td>
+                                    <td>{{ entry.companyname }}</td>
+                                    <td>{{ entry.bookingdate }}</td>
+                                    <td>{{ entry.paydate }}</td>
+                                    <td>₹{{ entry.payamount }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+<br><br>
+            <div class="text-center">
+                <form method="post" action="{% url 'datewisebookingreport_excel' %}">
+                    {% csrf_token %}
+                        <input type="hidden" name="fromDate" value="{{ from_date|date:'Y-m-d' }}">
+                        <input type="hidden" name="toDate" value="{{ to_date|date:'Y-m-d' }}">
+                    <button type="submit" name="export_excel" class="btn btn-primary">Download Excel Report</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

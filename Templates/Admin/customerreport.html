@@ -1,0 +1,113 @@
+{% include 'admin/adminheader.html' %}
+<br>
+<br>
+<br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registered Customers</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 20px;
+        }
+        h2 { text-align: center; }
+
+        .filter-box {
+            background: #ffffff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .filter-box label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .filter-box input {
+            padding: 5px;
+            margin-right: 15px;
+        }
+
+        .filter-box button {
+            padding: 6px 15px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+        }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        table th {
+            background: #343a40;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Registered Customers</h2>
+
+<!-- Filter Form -->
+<div class="filter-box">
+    <form method="get">
+        
+
+        <!-- Excel Button -->
+        <a href="{% url 'customerreport_excel' %}">
+            <button type="button" style="background:green;">Export to Excel</button>
+        </a>
+    </form>
+</div>
+
+<!-- Customer Table -->
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Customer Name</th>
+        <th>Password</th>
+        <th>Contact</th>
+        <th>Email</th>
+        <th>Location</th>
+    </tr>
+
+    {% for t in customers %}
+    <tr>
+        <td>{{ t.username }}</td>
+        <td>{{ t.name }}</td>
+        <td>{{ t.password }}</td>
+        <td>{{ t.contact }}</td>
+        <td>{{ t.email }}</td>
+        <td>{{ t.locationid.locationname }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="8">No customers found</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
+{% include 'admin/adminfooter.html' %}
