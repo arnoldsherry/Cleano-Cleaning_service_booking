@@ -1,0 +1,61 @@
+{% load static %}
+{% include 'Company/companyheader.html' %}
+
+<div class="body-wrapper">
+	<header class="app-header">
+		<nav class="navbar navbar-expand-lg navbar-light">
+			<ul class="navbar-nav">
+				<li class="nav-item d-block d-xl-none">
+					<a class="nav-link sidebartoggler" id="headerCollapse" href="javascript:void(0)">
+						<i class="ti ti-menu-2"></i>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+
+	<div class="body-wrapper-inner">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-flex justify-content-between align-items-center mb-4">
+								<h5 class="card-title fw-semibold mb-0">Company Profile</h5>
+								<a href="{% url 'company_changepassword' %}" class="btn btn-primary">Change Password</a>
+								<a href="{% url 'company_logout' %}" class="btn btn-primary">Logout</a>
+								<a href="{% url 'company_editprofilepage' %}" class="btn btn-primary">Edit Profile</a>
+							</div>
+							<div class="row g-4 align-items-start">
+								<div class="col-md-4 text-center">
+									{% if company.image %}
+									<img src="{{ company.image.url }}" alt="{{ company.compname }}" class="img-fluid rounded" style="max-height: 260px; object-fit: cover;">
+									{% else %}
+									<img src="{% static 'Company/assets/images/profile/user-1.jpg' %}" alt="No image" class="img-fluid rounded" style="max-height: 260px; object-fit: cover;">
+									{% endif %}
+								</div>
+
+								<div class="col-md-8">
+									<ul class="list-group list-group-flush">
+										<li class="list-group-item"><strong>Company Name:</strong> {{ company.compname }}</li>
+										<li class="list-group-item"><strong>Username:</strong> {{ company.username }}</li>
+										<li class="list-group-item"><strong>Email:</strong> {{ company.email }}</li>
+										<li class="list-group-item"><strong>Contact:</strong> {{ company.contact }}</li>
+										<li class="list-group-item"><strong>Street:</strong> {{ company.street }}</li>
+										<li class="list-group-item"><strong>City:</strong> {{ company.city }}</li>
+										<li class="list-group-item"><strong>State:</strong> {{ company.state }}</li>
+										<li class="list-group-item"><strong>Location:</strong> {{ company.locationid.locationname }}</li>
+										<li class="list-group-item"><strong>Description:</strong> {{ company.description }}</li>
+										<li class="list-group-item"><strong>Status:</strong> {{ company.status }}</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% include 'Company/companyfooter.html' %}

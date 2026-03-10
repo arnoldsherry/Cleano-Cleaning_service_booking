@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 09, 2026 at 04:19 AM
+-- Generation Time: Mar 10, 2026 at 10:05 AM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `adminapp_tbl_district` (
   `districtid` int NOT NULL AUTO_INCREMENT,
   `districtname` varchar(50) NOT NULL,
   PRIMARY KEY (`districtid`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `adminapp_tbl_district`
@@ -64,7 +64,17 @@ INSERT INTO `adminapp_tbl_district` (`districtid`, `districtname`) VALUES
 (7, 'Kollam'),
 (9, 'Kasargod'),
 (11, 'Kannur'),
-(12, 'wayanad');
+(12, 'wayanad'),
+(13, 'Alappuzha'),
+(14, 'Mo'),
+(15, 'Jk'),
+(16, 'Ll'),
+(17, 'Kk'),
+(18, 'Arno'),
+(19, 'Kol'),
+(20, 'NN'),
+(21, 'Aa'),
+(22, 'Hh');
 
 -- --------------------------------------------------------
 
@@ -79,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `adminapp_tbl_location` (
   `districtid_id` int NOT NULL,
   PRIMARY KEY (`locationid`),
   KEY `adminapp_tbl_location_districtid_id_582f66a5` (`districtid_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `adminapp_tbl_location`
@@ -96,7 +106,8 @@ INSERT INTO `adminapp_tbl_location` (`locationid`, `locationname`, `districtid_i
 (9, 'Karimattom', 10),
 (10, 'Kollasery', 7),
 (11, 'Kannuketty', 11),
-(12, 'Thamaressery', 12);
+(12, 'Thamaressery', 12),
+(13, 'Kuttanad', 13);
 
 -- --------------------------------------------------------
 
@@ -144,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   KEY `auth_permission_content_type_id_2f476e4b` (`content_type_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `auth_permission`
@@ -214,7 +225,11 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (61, 'Can add tbl_payment', 16, 'add_tbl_payment'),
 (62, 'Can change tbl_payment', 16, 'change_tbl_payment'),
 (63, 'Can delete tbl_payment', 16, 'delete_tbl_payment'),
-(64, 'Can view tbl_payment', 16, 'view_tbl_payment');
+(64, 'Can view tbl_payment', 16, 'view_tbl_payment'),
+(65, 'Can add tbl_credit', 17, 'add_tbl_credit'),
+(66, 'Can change tbl_credit', 17, 'change_tbl_credit'),
+(67, 'Can delete tbl_credit', 17, 'delete_tbl_credit'),
+(68, 'Can view tbl_credit', 17, 'view_tbl_credit');
 
 -- --------------------------------------------------------
 
@@ -334,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `django_content_type`
@@ -356,7 +371,8 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (13, 'guestapp', 'tbl_company'),
 (14, 'companyapp', 'tbl_service'),
 (15, 'userapp', 'tbl_booking'),
-(16, 'userapp', 'tbl_payment');
+(16, 'userapp', 'tbl_payment'),
+(17, 'userapp', 'tbl_credit');
 
 -- --------------------------------------------------------
 
@@ -371,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `django_migrations`
@@ -430,7 +446,10 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (56, 'userapp', '0002_tbl_booking_loginid', '2026-01-23 10:09:26.093261'),
 (57, 'userapp', '0003_alter_tbl_booking_loginid', '2026-01-23 10:09:26.119415'),
 (58, 'userapp', '0004_remove_tbl_booking_loginid', '2026-01-23 10:12:57.343867'),
-(59, 'userapp', '0005_tbl_payment', '2026-01-29 09:30:56.463548');
+(59, 'userapp', '0005_tbl_payment', '2026-01-29 09:30:56.463548'),
+(60, 'userapp', '0006_tbl_credit', '2026-02-17 09:23:14.129069'),
+(61, 'userapp', '0007_alter_tbl_credit_creditamount', '2026-02-17 09:24:18.656913'),
+(62, 'guestapp', '0019_tbl_company_email', '2026-02-23 05:38:23.186140');
 
 -- --------------------------------------------------------
 
@@ -452,7 +471,7 @@ CREATE TABLE IF NOT EXISTS `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
-('gwbhmrfp1x0i82k73njwprng3v46wmfq', 'eyJsb2dpbmlkIjoxLCJ1c2VybmFtZSI6ImFkbWluIn0:1vnWc0:4k1q9rrrFJCgJBpttySseEJk-xV8hprTQYbe65pModQ', '2026-02-18 06:43:40.412865');
+('gwbhmrfp1x0i82k73njwprng3v46wmfq', 'eyJsb2dpbmlkIjoyNCwidXNlcm5hbWUiOiJCaWx2ZXJ0In0:1vztFY:NGuhl5MvBy3M-qXVDdB1VDL9pZO6ivaFezgrBa0jv20', '2026-03-24 09:19:36.567389');
 
 -- --------------------------------------------------------
 
@@ -474,18 +493,24 @@ CREATE TABLE IF NOT EXISTS `guestapp_tbl_company` (
   `description` varchar(200) NOT NULL,
   `image` varchar(100) NOT NULL,
   `status` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
   PRIMARY KEY (`compid`),
   KEY `guestapp_tbl_company_locationid_id_657881e8` (`locationid_id`),
   KEY `guestapp_tbl_company_loginid_id_d66faff3` (`loginid_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `guestapp_tbl_company`
 --
 
-INSERT INTO `guestapp_tbl_company` (`compid`, `compname`, `contact`, `locationid_id`, `loginid_id`, `city`, `state`, `street`, `username`, `description`, `image`, `status`) VALUES
-(17, 'KClean', '45677890', 5, 39, 'Kochi', 'Kerala', 'Nagr', 'kclean123', 'Good', '1000041020.jpg', 'Accepted'),
-(16, 'ArnClean1', '8590058532', 6, 38, 'Kochi', 'Kerala', 'Alfiya nagar', 'arnclean1234', 'Good', 'ragraph_text.png', 'Accepted');
+INSERT INTO `guestapp_tbl_company` (`compid`, `compname`, `contact`, `locationid_id`, `loginid_id`, `city`, `state`, `street`, `username`, `description`, `image`, `status`, `email`) VALUES
+(21, 'JaClean', '45677890343', 7, 43, 'Kochi', 'Kerala', 'Alfiya nagar', 'aaa', 'Good', '3086-1920x1080-desktop-full-hd-bmw-background.jpg', 'In Queue', 'jaclean@gmail.com'),
+(19, 'JAcoClean', '45677890', 10, 41, 'Kochi', 'Kerala', 'Alfiya nagar', 'jacoclean123', 'Good', '1000041017_hj7NO2W.jpg', 'Accepted', 'jacoclean@gmail.com'),
+(17, 'KClean', '6589518852', 9, 39, 'Kochi', 'Kerala', 'Nagr', 'kclean123', 'Good', '1000041020.jpg', 'Accepted', 'kclean@gmail.com'),
+(16, 'ArnClean1', '8590058532', 6, 38, 'Kochi', 'Kerala', 'Alfiya nagar', 'arnclean1234', 'Good', 'ragraph_text.png', 'Accepted', 'arnclean@gmail.com'),
+(22, 'KClean', '4567789021', 7, 44, 'Kochi', 'Kerala', 'Gandhi nagar', 'aaa', 'Good', '3086-1920x1080-desktop-full-hd-bmw-background_nb7CMBu.jpg', 'In Queue', 'kclean2@gmail.com'),
+(23, 'ferclean', '4567789021', 7, 45, 'Kochi', 'Kerala', 'Gandhi nagar', 'fer', 'Good', '1000041021.jpg', 'In Queue', 'ferclean@gmail.com'),
+(24, 'gigclean', '4567789021', 7, 46, 'Kochi', 'Kerala', 'Gandhi nagar', 'gig', 'Good', '1000041021_rETzDZT.jpg', 'Accepted', 'arnoldsherry999@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -501,18 +526,21 @@ CREATE TABLE IF NOT EXISTS `guestapp_tbl_login` (
   `role` varchar(50) NOT NULL,
   `status` varchar(50) NOT NULL,
   PRIMARY KEY (`loginid`)
-) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `guestapp_tbl_login`
 --
 
 INSERT INTO `guestapp_tbl_login` (`loginid`, `username`, `password`, `role`, `status`) VALUES
-(1, 'admin', 'admin', 'admin', 'Accepted'),
-(39, 'kclean123', '123', 'company', 'Accepted'),
-(21, 'Arnold', '123', 'user', 'Accepted'),
-(24, 'Bilvert', '123', 'user', 'Accepted'),
-(38, 'arnclean1234', '123', 'company', 'Accepted');
+(1, 'Arnold', 'Admin@7', 'admin', 'Accepted'),
+(41, 'jacoclean123', 'Jaclean@123', 'company', 'Accepted'),
+(39, 'kclean123', 'Kclean@123', 'company', 'Accepted'),
+(21, 'Arnold', 'Arnold@123', 'user', 'Accepted'),
+(40, 'arnclean123', 'Arnclean@123', 'company', 'In Queue'),
+(24, 'Bilvert', 'Bilvert@123', 'user', 'Accepted'),
+(46, 'gig', 'Gig@123', 'company', 'Accepted'),
+(45, 'fer', 'Fer@123', 'company', 'In Queue');
 
 -- --------------------------------------------------------
 
@@ -540,7 +568,7 @@ CREATE TABLE IF NOT EXISTS `guestapp_user` (
 --
 
 INSERT INTO `guestapp_user` (`userid`, `username`, `password`, `contact`, `email`, `loginid_id`, `locationid_id`, `name`) VALUES
-(3, 'Bilvert', '123', '45677890', 'arnoldsherry999@gmail.com', 24, 11, 'bilvert');
+(3, 'Bilvert', '123', '45677890', 'arnoldsherry999@gmail.com', 24, 0, 'Bilvert');
 
 -- --------------------------------------------------------
 
@@ -558,16 +586,39 @@ CREATE TABLE IF NOT EXISTS `userapp_tbl_booking` (
   PRIMARY KEY (`bookingid`),
   KEY `userapp_tbl_booking_serviceid_id_4289bd0b` (`serviceid_id`),
   KEY `userapp_tbl_booking_userid_id_fde6a056` (`userid_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `userapp_tbl_booking`
 --
 
 INSERT INTO `userapp_tbl_booking` (`bookingid`, `bookingstatus`, `bookingdate`, `serviceid_id`, `userid_id`) VALUES
-(9, 'Requested', '2026-02-04', 4, 3),
-(8, 'Requested', '2026-02-04', 4, 3),
-(7, 'Paid', '2026-02-03', 4, 3);
+(15, 'Paid', '2026-03-31', 4, 3),
+(16, 'Requested', '2026-04-10', 4, 3),
+(12, 'Paid', '2026-03-10', 4, 3),
+(13, 'Paid', '2026-03-26', 4, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userapp_tbl_credit`
+--
+
+DROP TABLE IF EXISTS `userapp_tbl_credit`;
+CREATE TABLE IF NOT EXISTS `userapp_tbl_credit` (
+  `creditid` int NOT NULL AUTO_INCREMENT,
+  `creditamount` int NOT NULL,
+  `userid_id` int NOT NULL,
+  PRIMARY KEY (`creditid`),
+  KEY `userapp_tbl_credit_userid_id_347513cd` (`userid_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `userapp_tbl_credit`
+--
+
+INSERT INTO `userapp_tbl_credit` (`creditid`, `creditamount`, `userid_id`) VALUES
+(1, 0, 3);
 
 -- --------------------------------------------------------
 
@@ -584,14 +635,16 @@ CREATE TABLE IF NOT EXISTS `userapp_tbl_payment` (
   `bookingid_id` int NOT NULL,
   PRIMARY KEY (`paymentid`),
   KEY `userapp_tbl_payment_bookingid_id_f9e4a766` (`bookingid_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `userapp_tbl_payment`
 --
 
 INSERT INTO `userapp_tbl_payment` (`paymentid`, `paymentdate`, `totalamount`, `paymentstatus`, `bookingid_id`) VALUES
-(2, '2026-02-02', 2500, 'Paid', 7);
+(6, '2026-02-23', 2500, 'Paid', 13),
+(5, '2026-02-17', 2500, 'Paid', 12),
+(8, '2026-03-10', 2500, 'Paid', 15);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,0 +1,183 @@
+{% load static %}
+{% include 'Company/companyheader.html' %}
+<br><br><br>
+<br><br><br>
+<script src="{% static 'jquery-3.7.1.min.js' %}"></script>
+
+<script>
+
+$(document).ready(function() {
+//alert('hii');
+    $.ajaxSetup({
+        headers: {"X-CSRFToken": '{{ csrf_token }}'}
+    });
+
+    $("#districtid").change(function() {
+        var districtid = $(this).val();
+        $('#locationid').html("<option value=''>Select location</option>");
+
+        $.ajax({
+            type: "POST",
+            url: '{% url "filllocation" %}',
+            data: {districtid: districtid},
+            dataType: "json",
+            success: function(data) {
+                // Populate locations for selected district
+                $.each(data, function(key, val) {
+                    var row = "<option value='" + val.locationid + "'>" + val.locationname + "</option>";
+                    $('#locationid').append(row);
+                });
+            },
+            error: function() {
+                $('#locationid').html("<option value=''>Unable to load locations</option>");
+            }
+        });
+    });
+});
+
+</script>
+<div class="center-wrapper">
+  <div class="card center-card shadow">
+
+    <div class="card-header d-flex align-items-center justify-content-between">
+      <h5 class="mb-0">Edit Company Profile</h5>
+      <small class="text-muted">Company</small>
+    </div>
+
+    <div class="card-body">
+      {% if success %}
+      <div class="alert alert-success" role="alert">
+        Company profile edited successfully!
+      </div>
+      {% endif %}
+
+      <form class="forms-sample" method="post"
+            action="{% url 'company_editprofile' %}"
+        enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Company name</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control"
+                   id="companyname"
+                   name="companyname"
+                   value="{{company.compname}}"
+                   pattern="^[A-Z][a-zA-Z\s]*" title="Name must start with a capital letter and contain only letters and spaces"
+                   >
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Username</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control"
+                   id="username"
+                   name="username"
+                   value="{{company.username}}"
+                  >
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Image</label>
+          <div class="col-sm-10">
+            <input type="file" class="form-control"
+                   id="image"
+                   name="image"
+                   accept=".jpg,.jpeg,.png,.gif,.webp,image/*"
+                   title="Upload image in JPG, PNG, GIF, or WEBP format">
+            <small class="text-muted">Accepted formats: JPG, PNG, GIF, WEBP. Max size: 5MB.</small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Description</label>
+          <div class="col-sm-10">
+            <textarea class="form-control"
+                      id="desc"
+                      name="desc"
+                      rows="3"
+                      minlength="10"
+                      title="Description must be at least 10 characters"
+                      required>{{company.description}}</textarea>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Contact</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control"
+                      id="contact"
+                      name="contact"
+                      value="{{company.contact}}"
+                      pattern="[6-9][0-9]{9}"
+                      maxlength="10"
+                      title="Enter a valid 10-digit mobile number starting with 6,7,8, or 9"
+                      required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Email</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control"
+                      id="email"
+                      name="email"
+                      value="{{company.email}}"
+                      title="Enter a valid email address"
+                      required>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <label class="col-sm-2 col-form-label">District</label>
+          <div class="col-sm-10">
+            <select name="districtid" id="districtid" class="form-select" >
+              <option>Select district</option>
+              {% for district in districts %}
+                <option value="{{district.districtid}}">
+                  {{district.districtname}}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <label class="col-sm-2 col-form-label">Location</label>
+          <div class="col-sm-10">
+            <select name="locationid" id="locationid" class="form-select" >
+              <option value="">Select location</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary px-4">
+              Submit
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+<style>
+  .center-wrapper {
+    min-height: 100vh;              /* Full screen height */
+    display: flex;
+    justify-content: center;        /* Horizontal center */
+    align-items: center;            /* Vertical center */
+  }
+
+  .center-card {
+    width: 100%;
+    max-width: 900px;               /* Controls card width */
+  }
+</style>
+
+{% include 'Company/companyfooter.html' %}

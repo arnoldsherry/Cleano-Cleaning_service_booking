@@ -1,0 +1,437 @@
+{% load static %}
+{% include 'User/userheader.html' %}
+
+<div class="credit-balance-portal">
+	<div class="credit-card">
+		<div class="credit-header">
+			<div class="credit-title">
+				<h2>Add Credit Balance</h2>
+				<p>Top up your account balance to pay for services.</p>
+			</div>
+			<div class="credit-badge">Secure Payment</div>
+		</div>
+
+		<div class="credit-body">
+			<div class="balance-info">
+				<div class="current-balance">
+					<span class="balance-label">Current Balance</span>
+                    {% for c in cr_objs %}
+
+					<span class="balance-amount">₹{{ c.creditamount|default:"0" }}</span>
+                    {% endfor %}
+				</div>
+			</div>
+
+			<form class="credit-form" method="post" action="{% url 'add_credit' %}">
+				{% csrf_token %}
+
+				<h3>Select Amount</h3>
+				<div class="amount-options">
+					<button type="button" class="amount-btn" onclick="setAmount(1000)">₹1000</button>
+					<button type="button" class="amount-btn" onclick="setAmount(2000)">₹2000</button>
+					<button type="button" class="amount-btn" onclick="setAmount(5000)">₹5000</button>
+                    <button type="button" class="amount-btn" onclick="setAmount(10000)">₹10000</button>
+				</div>
+
+				<div class="form-group full">
+					<label for="customAmount">Or Enter Custom Amount</label>
+					<input id="customAmount" name="creditamount" type="number" min="1000" max="50000" step="100" placeholder="Enter amount (₹100 - ₹50000)" required>
+					<small>Minimum: ₹1000 | Maximum: ₹50,000</small>
+				</div>
+
+				<h3>Payment Method</h3>
+				<div class="payment-methods">
+					<div class="method-option">
+						<input type="radio" id="card" name="payment_method" value="card" checked required onchange="togglePaymentForm('card')">
+						<label for="card">Credit/Debit Card</label>
+					</div>
+					<div class="method-option">
+						<input type="radio" id="upi" name="payment_method" value="upi" required onchange="togglePaymentForm('upi')">
+						<label for="upi">UPI</label>
+					</div>
+
+				</div>
+
+				<!-- Card Payment Form -->
+				<div id="cardForm" class="payment-form-section">
+					<h3>Card Details</h3>
+					<div class="form-grid">
+						<div class="form-group full">
+							<label for="cardName">Cardholder Name</label>
+							<input id="cardName" name="card_name" type="text" placeholder="Full name on card">
+						</div>
+
+						<div class="form-group full">
+							<label for="cardNumber">Card Number</label>
+							<input id="cardNumber" name="card_number" type="text" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456">
+						</div>
+
+						<div class="form-group">
+							<label for="expiry">Expiry Date</label>
+							<input id="expiry" name="expiry" type="text" inputmode="numeric" maxlength="5" placeholder="MM/YY">
+						</div>
+
+						<div class="form-group">
+							<label for="cvv">CVV</label>
+							<input id="cvv" name="cvv" type="password" inputmode="numeric" maxlength="4" placeholder="***">
+						</div>
+					</div>
+				</div>
+
+				<!-- UPI Payment Form -->
+				<div id="upiForm" class="payment-form-section" style="display: none;">
+					<h3>UPI Details</h3>
+					<div class="form-grid">
+						<div class="form-group full">
+							<label for="upiId">UPI ID</label>
+							<input id="upiId" name="upi_id" type="text" placeholder="yourname@upibank" pattern="[a-zA-Z0-9._-]+@[a-zA-Z]+">
+							<small>Example: name@okhdfcbank, mobile@ybl</small>
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="form-actions">
+					<input type="submit" class="btn-primary" value="Add Balance">
+					<a href="{% url 'index' %}" class="btn-secondary">Cancel</a>
+				</div>
+
+				<p class="payment-note">
+					✓ All payments are 100% secure and encrypted<br>
+					✓ Money will be added to your account instantly<br>
+					✓ No hidden charges or extra fees
+				</p>
+			</form>
+		</div>
+	</div>
+</div>
+
+<style>
+	.credit-balance-portal {
+		min-height: calc(100vh - 120px);
+		padding: 40px 20px 60px;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
+	}
+
+	.credit-card {
+		width: 100%;
+		max-width: 900px;
+		background: #ffffff;
+		border-radius: 16px;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+		overflow: hidden;
+	}
+
+	.credit-header {
+		background: linear-gradient(135deg, #2fd534 0%, #29672b 100%);
+		color: white;
+		padding: 30px;
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+	}
+
+	.credit-title h2 {
+		margin: 0 0 8px;
+		font-size: 28px;
+		font-weight: 700;
+	}
+
+	.credit-title p {
+		margin: 0;
+		font-size: 14px;
+		opacity: 0.9;
+	}
+
+	.credit-badge {
+		background: rgba(255, 255, 255, 0.25);
+		padding: 8px 16px;
+		border-radius: 20px;
+		font-size: 12px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+	.credit-body {
+		padding: 40px;
+	}
+
+	.balance-info {
+		background: #f8f9ff;
+		padding: 20px;
+		border-radius: 12px;
+		margin-bottom: 30px;
+		border-left: 4px solid #23541d;
+	}
+
+	.current-balance {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.balance-label {
+		font-size: 14px;
+		color: #666;
+		font-weight: 500;
+	}
+
+	.balance-amount {
+		font-size: 28px;
+		font-weight: 700;
+		color: #30ac36;
+	}
+
+	.credit-form h3 {
+		margin: 30px 0 15px;
+		font-size: 16px;
+		font-weight: 600;
+		color: #222;
+	}
+
+	.credit-form h3:first-of-type {
+		margin-top: 0;
+	}
+
+	.amount-options {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+		gap: 12px;
+		margin-bottom: 25px;
+	}
+
+	.amount-btn {
+		padding: 12px;
+		background: #f0f0f0;
+		border: 2px solid #e0e0e0;
+		border-radius: 8px;
+		font-size: 14px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+
+	.amount-btn:hover {
+		background: #167432;
+		color: white;
+		border-color: #790845;
+	}
+
+	.form-group {
+		margin-bottom: 20px;
+	}
+
+	.form-group.full {
+		grid-column: 1 / -1;
+	}
+
+	.form-group label {
+		display: block;
+		margin-bottom: 8px;
+		font-size: 13px;
+		font-weight: 600;
+		color: #333;
+	}
+
+	.form-group input,
+	.form-group select {
+		width: 100%;
+		padding: 12px;
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		font-size: 14px;
+		transition: border-color 0.3s;
+	}
+
+	.form-group input:focus,
+	.form-group select:focus {
+		outline: none;
+		border-color: #1b991b;
+		box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+	}
+
+	.form-group small {
+		display: block;
+		margin-top: 5px;
+		font-size: 12px;
+		color: #999;
+	}
+
+	.form-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 15px;
+	}
+
+	.payment-methods {
+		display: grid;
+		gap: 12px;
+		margin-bottom: 25px;
+	}
+
+	.method-option {
+		display: flex;
+		align-items: center;
+		padding: 12px;
+		border: 2px solid #e0e0e0;
+		border-radius: 8px;
+		cursor: pointer;
+		transition: all 0.3s;
+	}
+
+	.method-option:hover {
+		border-color: #19810b;
+		background: #f8f9ff;
+	}
+
+	.method-option input[type="radio"] {
+		margin-right: 12px;
+		cursor: pointer;
+		width: auto;
+	}
+
+	.method-option label {
+		margin: 0;
+		cursor: pointer;
+		font-weight: 500;
+	}
+
+	.form-actions {
+		display: flex;
+		gap: 12px;
+		margin: 30px 0;
+	}
+
+	.btn-primary,
+	.btn-secondary {
+		padding: 12px 32px;
+		border: none;
+		border-radius: 8px;
+		font-size: 14px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.3s;
+		text-decoration: none;
+		display: inline-block;
+		text-align: center;
+	}
+
+	.btn-primary {
+		background: linear-gradient(135deg, #9dee94 0%, #66cb1e 100%);
+		color: white;
+		flex: 1;
+	}
+
+	.btn-primary:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+	}
+
+	.btn-secondary {
+		background: #f0f0f0;
+		color: #333;
+		flex: 1;
+	}
+
+	.btn-secondary:hover {
+		background: #e0e0e0;
+	}
+
+	.payment-note {
+		background: #f0fff4;
+		border-left: 4px solid #48bb78;
+		padding: 15px;
+		border-radius: 8px;
+		font-size: 13px;
+		color: #22543d;
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	.payment-form-section {
+		animation: slideIn 0.3s ease-in-out;
+	}
+
+	@keyframes slideIn {
+		from {
+			opacity: 0;
+			transform: translateY(-10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.credit-header {
+			flex-direction: column;
+			gap: 15px;
+		}
+
+		.credit-body {
+			padding: 20px;
+		}
+
+		.form-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.form-actions {
+			flex-direction: column;
+		}
+
+		.amount-options {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+</style>
+
+<script>
+	function setAmount(amount) {
+		document.getElementById('customAmount').value = amount;
+		// Highlight the selected button
+		document.querySelectorAll('.amount-btn').forEach(btn => {
+			btn.style.background = '#f0f0f0';
+			btn.style.color = 'inherit';
+		});
+		event.target.style.background = '#667eea';
+		event.target.style.color = 'white';
+	}
+
+	function togglePaymentForm(method) {
+		// Hide all forms
+		document.getElementById('cardForm').style.display = 'none';
+		document.getElementById('upiForm').style.display = 'none';
+
+		// Show selected form
+		if (method === 'card') {
+			document.getElementById('cardForm').style.display = 'block';
+		} else if (method === 'upi') {
+			document.getElementById('upiForm').style.display = 'block';
+		}
+	}
+
+	// Format card number input
+	document.getElementById('cardNumber')?.addEventListener('input', function (e) {
+		let value = e.target.value.replace(/\s/g, '');
+		let formattedValue = value.replace(/(.{4})/g, '$1 ').trim();
+		e.target.value = formattedValue;
+	});
+
+	// Format expiry input
+	document.getElementById('expiry')?.addEventListener('input', function (e) {
+		let value = e.target.value.replace(/\D/g, '');
+		if (value.length >= 2) {
+			value = value.substring(0, 2) + '/' + value.substring(2, 4);
+		}
+		e.target.value = value;
+	});
+</script>
+
+{% include 'User/userfooter.html' %}

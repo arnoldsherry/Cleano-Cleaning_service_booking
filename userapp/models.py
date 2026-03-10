@@ -15,3 +15,7 @@ class tbl_payment(models.Model):
     paymentdate=models.DateField()
     totalamount=models.IntegerField()
     paymentstatus=models.CharField(max_length=50)
+class tbl_credit(models.Model):
+    creditid=models.AutoField(primary_key=True)
+    userid=models.ForeignKey('guestapp.user',on_delete=models.CASCADE)
+    creditamount=models.IntegerField(default=0)

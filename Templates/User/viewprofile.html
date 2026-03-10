@@ -1,0 +1,491 @@
+{% load static %}
+{% include 'User/userheader.html' %}
+
+<div class="profile-portal">
+	<div class="profile-container">
+		<!-- Profile Header -->
+		<div class="profile-header">
+			<div class="profile-avatar">
+				<i class="fas fa-user-circle"></i>
+			</div>
+			<div class="profile-header-info">
+				<h2>{{ user.name }}</h2>
+				<p>@{{ user.username }}</p>
+				<a href="{% url 'changepassword' %}" class="btn btn-primary">Change Password</a>
+				<a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+				<a href="{% url 'editprofilepage' %}" class="btn btn-primary">Edit Profile</a>
+			</div>
+		</div>
+
+		<!-- Profile Content -->
+		<div class="profile-body">
+			<!-- Personal Information Card -->
+			<div class="profile-card">
+				<div class="card-header">
+					<h3><i class="fas fa-user"></i> Personal Information</h3>
+				</div>
+				<div class="card-content">
+					<div class="info-row">
+						<div class="info-label">
+							<i class="fas fa-id-card"></i> Full Name
+						</div>
+						<div class="info-value">{{ user.name }}</div>
+					</div>
+					<div class="info-row">
+						<div class="info-label">
+							<i class="fas fa-at"></i> Username
+						</div>
+						<div class="info-value">{{ user.username }}</div>
+					</div>
+					<div class="info-row">
+						<div class="info-label">
+							<i class="fas fa-envelope"></i> Email
+						</div>
+						<div class="info-value">{{ user.email }}</div>
+					</div>
+					<div class="info-row">
+						<div class="info-label">
+							<i class="fas fa-phone"></i> Contact
+						</div>
+						<div class="info-value">{{ user.contact }}</div>
+					</div>
+					<div class="info-row">
+						<div class="info-label">
+							<i class="fas fa-map-marker-alt"></i> Location
+						</div>
+						<div class="info-value">{{ user.locationid.locationname }}, {{ user.locationid.districtid.districtname }}</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Account Statistics Card -->
+			<div class="profile-card">
+				<div class="card-header">
+					<h3><i class="fas fa-chart-bar"></i> Account Statistics</h3>
+				</div>
+				<div class="card-content">
+					<div class="stats-grid">
+						<div class="stat-item">
+							<div class="stat-icon total">
+								<i class="fas fa-calendar-check"></i>
+							</div>
+							<div class="stat-info">
+								<div class="stat-value">{{ total_bookings }}</div>
+								<div class="stat-label">Total Bookings</div>
+							</div>
+						</div>
+						<div class="stat-item">
+							<div class="stat-icon paid">
+								<i class="fas fa-check-circle"></i>
+							</div>
+							<div class="stat-info">
+								<div class="stat-value">{{ paid_services }}</div>
+								<div class="stat-label">Paid Services</div>
+							</div>
+						</div>
+						<div class="stat-item">
+							<div class="stat-icon pending">
+								<i class="fas fa-clock"></i>
+							</div>
+							<div class="stat-info">
+								<div class="stat-value">{{ pending_bookings }}</div>
+								<div class="stat-label">Pending Bookings</div>
+							</div>
+						</div>
+						<div class="stat-item">
+							<div class="stat-icon amount">
+								<i class="fas fa-rupee-sign"></i>
+							</div>
+							<div class="stat-info">
+								<div class="stat-value">₹{{ total_spent }}</div>
+								<div class="stat-label">Total Spent</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Credit Balance Card -->
+			<div class="profile-card">
+				<div class="card-header">
+					<h3><i class="fas fa-wallet"></i> Credit Balance</h3>
+				</div>
+				<div class="card-content">
+					<div class="credit-display">
+						<div class="credit-amount">
+							<span class="currency">₹</span>
+							<span class="amount">{{ credit_balance|default:"0" }}</span>
+						</div>
+						<a href="{% url 'addcleanocredit' %}" class="btn-add-credit">
+							<i class="fas fa-plus-circle"></i> Add Credit
+						</a>
+					</div>
+					<p class="credit-note">
+						<i class="fas fa-info-circle"></i> Use credit balance for quick and easy payments
+					</p>
+				</div>
+			</div>
+
+			<!-- Quick Actions Card -->
+			<div class="profile-card">
+				<div class="card-header">
+					<h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+				</div>
+				<div class="card-content">
+					<div class="quick-actions">
+						<a href="{% url 'searchservice' %}" class="action-btn">
+							<i class="fas fa-search"></i>
+							<span>Search Services</span>
+						</a>
+						<a href="{% url 'mybookings' %}" class="action-btn">
+							<i class="fas fa-calendar"></i>
+							<span>My Bookings</span>
+						</a>
+						<a href="{% url 'viewpaidservices' %}" class="action-btn">
+							<i class="fas fa-receipt"></i>
+							<span>Paid Services</span>
+						</a>
+						<a href="{% url 'reportcategorycount' %}" class="action-btn">
+							<i class="fas fa-chart-pie"></i>
+							<span>View Reports</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.profile-portal {
+		min-height: calc(100vh - 120px);
+		padding: 40px 20px 60px;
+		background: linear-gradient(180deg, #f8f9ff 0%, #ffffff 100%);
+	}
+
+	.profile-container {
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.profile-header {
+		background: linear-gradient(135deg, #4f46e5 0%, #6366f1 60%, #818cf8 100%);
+		border-radius: 16px;
+		padding: 40px;
+		display: flex;
+		align-items: center;
+		gap: 24px;
+		box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+		margin-bottom: 30px;
+		position: relative;
+		overflow: hidden;
+		justify-content: center;
+		text-align: center;
+	}
+
+	.profile-header::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 300px;
+		height: 300px;
+		background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+		border-radius: 50%;
+	}
+
+	.profile-avatar {
+		position: relative;
+		z-index: 1;
+	}
+
+	.profile-avatar i {
+		font-size: 100px;
+		color: #ffffff;
+		filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+	}
+
+	.profile-header-info {
+		flex: 1;
+		color: #ffffff;
+		position: relative;
+		z-index: 1;
+	}
+
+	.profile-header-info h2 {
+		margin: 0 0 8px;
+		font-size: 32px;
+		font-weight: 700;
+	}
+
+	.profile-header-info p {
+		margin: 0;
+		font-size: 18px;
+		opacity: 0.9;
+	}
+
+	.profile-body {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 24px;
+	}
+
+	.profile-card {
+		background: #ffffff;
+		border-radius: 16px;
+		box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+		border: 1px solid #eef2ff;
+		overflow: hidden;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.profile-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+	}
+
+	.card-header {
+		background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+		padding: 20px 24px;
+		border-bottom: 2px solid #e2e8f0;
+	}
+
+	.card-header h3 {
+		margin: 0;
+		font-size: 18px;
+		font-weight: 700;
+		color: #1e293b;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.card-header i {
+		color: #6366f1;
+	}
+
+	.card-content {
+		padding: 24px;
+	}
+
+	.info-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 14px 0;
+		border-bottom: 1px dashed #e2e8f0;
+	}
+
+	.info-row:last-child {
+		border-bottom: none;
+	}
+
+	.info-label {
+		font-weight: 600;
+		color: #64748b;
+		font-size: 14px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.info-label i {
+		color: #6366f1;
+		width: 18px;
+	}
+
+	.info-value {
+		color: #1e293b;
+		font-weight: 500;
+		text-align: right;
+	}
+
+	.stats-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 16px;
+	}
+
+	.stat-item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 16px;
+		background: #f8fafc;
+		border-radius: 12px;
+		border: 1px solid #e2e8f0;
+	}
+
+	.stat-icon {
+		width: 50px;
+		height: 50px;
+		border-radius: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 24px;
+		color: #ffffff;
+	}
+
+	.stat-icon.total {
+		background: linear-gradient(135deg, #3b82f6, #2563eb);
+	}
+
+	.stat-icon.paid {
+		background: linear-gradient(135deg, #10b981, #059669);
+	}
+
+	.stat-icon.pending {
+		background: linear-gradient(135deg, #f59e0b, #d97706);
+	}
+
+	.stat-icon.amount {
+		background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+	}
+
+	.stat-info {
+		flex: 1;
+	}
+
+	.stat-value {
+		font-size: 24px;
+		font-weight: 700;
+		color: #1e293b;
+		line-height: 1;
+		margin-bottom: 4px;
+	}
+
+	.stat-label {
+		font-size: 12px;
+		color: #64748b;
+		font-weight: 500;
+	}
+
+	.credit-display {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 24px;
+		background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+		border-radius: 12px;
+		margin-bottom: 16px;
+	}
+
+	.credit-amount {
+		color: #ffffff;
+		display: flex;
+		align-items: baseline;
+		gap: 4px;
+	}
+
+	.credit-amount .currency {
+		font-size: 24px;
+		font-weight: 600;
+	}
+
+	.credit-amount .amount {
+		font-size: 36px;
+		font-weight: 700;
+	}
+
+	.btn-add-credit {
+		background: rgba(255, 255, 255, 0.2);
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		color: #ffffff;
+		padding: 10px 20px;
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 14px;
+		transition: all 0.3s ease;
+	}
+
+	.btn-add-credit:hover {
+		background: rgba(255, 255, 255, 0.3);
+		transform: translateY(-2px);
+	}
+
+	.credit-note {
+		margin: 0;
+		font-size: 13px;
+		color: #64748b;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.credit-note i {
+		color: #6366f1;
+	}
+
+	.quick-actions {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 12px;
+	}
+
+	.action-btn {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
+		padding: 20px;
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
+		text-decoration: none;
+		color: #1e293b;
+		font-weight: 600;
+		font-size: 14px;
+		transition: all 0.3s ease;
+	}
+
+	.action-btn:hover {
+		background: #eef2ff;
+		border-color: #6366f1;
+		color: #4f46e5;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+	}
+
+	.action-btn i {
+		font-size: 28px;
+		color: #6366f1;
+	}
+
+	@media (max-width: 768px) {
+		.profile-header {
+			flex-direction: column;
+			padding: 30px 20px;
+		}
+
+		.profile-header-info h2 {
+			font-size: 24px;
+		}
+
+		.stats-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.quick-actions {
+			grid-template-columns: 1fr;
+		}
+
+		.credit-display {
+			flex-direction: column;
+			gap: 16px;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.profile-body {
+			grid-template-columns: 1fr;
+		}
+
+		.profile-avatar i {
+			font-size: 80px;
+		}
+	}
+</style>
+
+{% include 'User/userfooter.html' %}

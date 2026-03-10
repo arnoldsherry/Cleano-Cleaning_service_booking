@@ -69,16 +69,16 @@
                 <div class="card-body">
                   <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                     <div class="mb-3 mb-sm-0">
-                      <h5 class="card-title fw-semibold">Sales Profit</h5>
+                      <h5 class="card-title fw-semibold">Revenue from Services</h5>
                     </div>
-                    <div>
+                    <!-- <div>
                       <select class="form-select">
-                        <option value="1">March 2025</option>
-                        <option value="2">April 2025</option>
-                        <option value="3">May 2025</option>
-                        <option value="4">June 2025</option>
+                        <option value="1">March 2026</option>
+                        <option value="2">April 2026</option>
+                        <option value="3">May 2026</option>
+                        <option value="4">June 2026</option>
                       </select>
-                    </div>
+                    </div> -->
                   </div>
                   <div id="sales-profit"></div>
                 </div>
@@ -89,14 +89,14 @@
                 <div class="col-lg-12">
                   <div class="card bg-danger-subtle shadow-none w-100">
                     <div class="card-body">
-                      <div class="d-flex mb-10 pb-1 justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-6">
-                          <div
+                      <!-- <div class="d-flex mb-10 pb-1 justify-content-between align-items-center"> -->
+                        <!-- <div class="d-flex align-items-center gap-6"> -->
+                          <!-- <div
                             class="rounded-circle-shape bg-danger px-3 py-2 rounded-pill d-inline-flex align-items-center justify-content-center">
                             <iconify-icon icon="solar:users-group-rounded-bold-duotone"
                               class="fs-7 text-white"></iconify-icon>
-                          </div>
-                          <h6 class="mb-0 fs-4 fw-medium text-muted">
+                          </div> -->
+                          <!-- <h6 class="mb-0 fs-4 fw-medium text-muted">
                             Total followers
                           </h6>
                         </div>
@@ -119,18 +119,18 @@
                                   class="fs-4 ti ti-trash"></i>Delete</a>
                             </li>
                           </ul>
-                        </div>
+                        </div> -->
                       </div>
-                      <div class="row align-items-end justify-content-between">
+                      <!-- <div class="row align-items-end justify-content-between">
                         <div class="col-5">
                           <h2 class="mb-6 fs-8">4,562</h2>
                           <span class="badge rounded-pill border border-muted fw-bold text-muted fs-2 py-1">+23% last
                             month</span>
-                        </div>
-                        <div class="col-5">
+                        </div> -->
+                        <!-- <div class="col-5">
                           <div id="total-followers" class="rounded-bars"></div>
-                        </div>
-                      </div>
+                        </div> -->
+                      <!-- </div> -->
                     </div>
                   </div>
                 </div>
@@ -170,9 +170,10 @@
                       </div>
                       <div class="row align-items-center justify-content-between pt-4">
                         <div class="col-5">
-                          <h2 class="mb-6 fs-8 text-nowrap">$6,280</h2>
-                          <span class="badge rounded-pill border border-muted fw-bold text-muted fs-2 py-1">+18% last
-                            month</span>
+                          <h2 class="mb-6 fs-8 text-nowrap">₹{{ total_income|floatformat:0 }}</h2>
+                          <span class="badge rounded-pill border border-muted fw-bold {% if income_percentage_change >= 0 %}text-success{% else %}text-danger{% endif %} fs-2 py-1">
+                            {% if income_percentage_change >= 0 %}+{% endif %}{{ income_percentage_change }}% last month
+                          </span>
                         </div>
                         <div class="col-5">
                           <div id="total-income"></div>
@@ -187,7 +188,7 @@
           <div class="row">
             <div class="col-lg-8 d-flex align-items-stretch">
               <div class="card w-100 overflow-hidden">
-                <div class="card-body pb-0">
+                <!-- <div class="card-body pb-0">
                   <h4 class="fs-4 mb-1 card-title">Popular Products</h4>
                   <p class="mb-0 card-subtitle">Total 9k Visitors</p>
                 </div>
@@ -215,8 +216,8 @@
                               </div>
                             </div>
                           </td>
-                          <td>
-                            <h5 class="mb-0 fs-4">
+                          <td> -->
+                            <!-- <h5 class="mb-0 fs-4">
                               $180 <span class="text-muted">/499</span>
                             </h5>
                             <p class="text-muted mb-2">Partially paid</p>
@@ -401,7 +402,7 @@
                           </td>
                         </tr>
                       </tbody>
-                    </table>
+                    </table> -->
                   </div>
                 </div>
               </div>
@@ -409,14 +410,14 @@
             <div class="col-lg-4 d-flex align-items-stretch">
               <div class="card w-100">
                 <div class="card-body">
-                  <div class="d-flex mb-3 justify-content-between align-items-center">
+                  <!-- <div class="d-flex mb-3 justify-content-between align-items-center">
                     <h4 class="mb-0 card-title">Earning Reports</h4>
                     <div class="dropdown">
                       <button id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
                         class="rounded-circle btn-transparent rounded-circle btn-sm px-1 btn shadow-none">
                         <i class="ti ti-dots-vertical fs-6"></i>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                      </button> -->
+                      <!-- <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="javascript:void(0)">Action</a></li>
                         <li>
                           <a class="dropdown-item" href="javascript:void(0)">Another action</a>
@@ -519,7 +520,7 @@
                           class="ti ti-caret-up"></i>9.25%</span>
                     </li>
                     <a href="javascript:void(0)" class="fs-4 mt-7 text-center d-block">View more markets</a>
-                  </ul>
+                  </ul> -->
                 </div>
               </div>
             </div>
@@ -629,4 +630,175 @@
       </div>
     </div>
   </div>
+{{ months|json_script:"months-data" }}
+{{ revenue|json_script:"revenue-data" }}
+{{ recent_income_data|json_script:"recent-income-data" }}
 {% include 'Company/companyfooter.html' %}
+<script>
+  // Override the sales-profit chart with actual revenue data
+  $(document).ready(function() {
+    var months = JSON.parse(document.getElementById('months-data').textContent);
+    var revenue = JSON.parse(document.getElementById('revenue-data').textContent);
+    var recentIncomeData = JSON.parse(document.getElementById('recent-income-data').textContent);
+    
+    // Prepare data for the chart
+    var chartData = [];
+    for (var i = 0; i < months.length; i++) {
+      chartData.push({
+        x: months[i],
+        y: revenue[i]
+      });
+    }
+    
+    var options = {
+      series: [
+        {
+          type: "line",
+          name: "Revenue",
+          chart: {
+            foreColor: "#111c2d99",
+            fontSize: 12,
+            fontWeight: 500,
+            dropShadow: {
+              enabled: true,
+              enabledOnSeries: undefined,
+              top: 5,
+              left: 0,
+              blur: 3,
+              color: "#000",
+              opacity: 0.1,
+            },
+          },
+          data: chartData
+        }
+      ],
+      chart: {
+        height: 300,
+        fontFamily: "inherit",
+        foreColor: "#adb0bb",
+        fontSize: "12px",
+        offsetX: -15,
+        offsetY: 10,
+        animations: {
+          speed: 500,
+        },
+        toolbar: {
+          show: false,
+        },
+      },
+      colors: ["var(--bs-primary)"],
+      dataLabels: {
+        enabled: false,
+      },
+      fill: {
+        type: "gradient",
+        gradient: {
+          shadeIntensity: 0,
+          inverseColors: false,
+          opacityFrom: 0.1,
+          opacityTo: 0,
+          stops: [100],
+        },
+      },
+      grid: {
+        show: true,
+        strokeDashArray: 3,
+        borderColor: "#90A4AE50",
+      },
+      stroke: {
+        curve: "smooth",
+        width: 2,
+      },
+      xaxis: {
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+      },
+      yaxis: {
+        tickAmount: 3,
+        labels: {
+          formatter: function(val) {
+            return "₹" + val.toFixed(0);
+          }
+        }
+      },
+      legend: {
+        show: false,
+      },
+      tooltip: {
+        theme: "dark",
+        y: {
+          formatter: function(val) {
+            return "₹" + val.toFixed(2);
+          }
+        }
+      },
+    };
+    
+    // Clear and render the new chart
+    document.getElementById("sales-profit").innerHTML = "";
+    var chart = new ApexCharts(document.querySelector("#sales-profit"), options);
+    chart.render();
+    
+    // Override the total-income chart with actual data
+    var incomeOptions = {
+      chart: {
+        id: "total-income",
+        type: "area",
+        height: 70,
+        sparkline: {
+          enabled: true,
+        },
+        group: "sparklines",
+        fontFamily: "inherit",
+        foreColor: "#adb0bb",
+      },
+      series: [
+        {
+          name: "monthly earnings",
+          color: "var(--bs-secondary)",
+          data: recentIncomeData.length > 0 ? recentIncomeData : [0],
+        },
+      ],
+      stroke: {
+        curve: "smooth",
+        width: 2,
+      },
+      fill: {
+        type: "gradient",
+        gradient: {
+          shadeIntensity: 0,
+          inverseColors: false,
+          opacityFrom: 0,
+          opacityTo: 0,
+          stops: [20, 180],
+        },
+      },
+      markers: {
+        size: 0,
+      },
+      tooltip: {
+        theme: "dark",
+        fixed: {
+          enabled: true,
+          position: "right",
+        },
+        x: {
+          show: false,
+        },
+        y: {
+          formatter: function(val) {
+            return "₹" + val.toFixed(2);
+          }
+        }
+      },
+    };
+    
+    document.getElementById("total-income").innerHTML = "";
+    var incomeChart = new ApexCharts(document.querySelector("#total-income"), incomeOptions);
+    incomeChart.render();
+  });
+</script>

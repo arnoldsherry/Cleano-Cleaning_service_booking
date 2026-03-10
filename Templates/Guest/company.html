@@ -1,18 +1,18 @@
 {% load static %}
 {% include 'Guest/guestheader.html' %}
-<script src="{% static 'admin/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'jquery-3.7.1.min.js' %}"></script>
 
 <script>
 
 $(document).ready(function() {
-alert('hii');
+//alert('hii');
     $.ajaxSetup({
         headers: {"X-CSRFToken": '{{ csrf_token }}'}
     });
 
-    $("#district").change(function() {
+    $("#districtid").change(function() {
         var districtid = $(this).val();
-alert('districtid');
+        $('#locationid').html("<option value=''>----- Select Location -----</option>");
 
         $.ajax({
             type: "POST",
@@ -20,14 +20,14 @@ alert('districtid');
             data: {districtid: districtid},
             dataType: "json",
             success: function(data) {
-                $('#location').empty();
-alert('location');
-
-                // Populate table with new data
+                // Populate locations for selected district
                 $.each(data, function(key, val) {
                     var row = "<option value='" + val.locationid + "'>" + val.locationname + "</option>";
-                    $('#location').append(row);
+                    $('#locationid').append(row);
                 });
+            },
+            error: function() {
+                $('#locationid').html("<option value=''>Unable to load locations</option>");
             }
         });
     });
@@ -40,7 +40,7 @@ alert('location');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Registration</title>
+    <title>Company Registration</title>
     <style>
         /* Container Styling */
         .form-container {
@@ -125,19 +125,19 @@ alert('location');
         
         <h2 class="form-title">Company Registration</h2>
 
-         <!-- company naem -->
+         <!-- company name -->
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Enter Company name" name="compname" id="compname" required>
+            <input type="text" class="form-control" placeholder="Enter Company name" name="compname" id="compname" pattern="[A-Z][a-zA-Z\s]*" title="Name must start with a capital letter and contain only letters and spaces" required>
         </div>
 
-         <!-- user naem -->
+         <!-- user name -->
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Enter user name" name="username" id="username" required>
         </div>
 
         <!-- Password -->
         <div class="form-group">
-            <input type="password" class="form-control" placeholder="Enter Password" name="password" id="password" required>
+            <input type="password" class="form-control" placeholder="Enter Password" name="password" id="password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$" title="Password must be at least 6 characters, include 1 letter, 1 number, 1 special character, and no spaces" required>
         </div>
         <!-- Email -->
         <div class="form-group">
@@ -146,29 +146,35 @@ alert('location');
 
         <!-- Phone -->
         <div class="form-group">
-            <input type="number" class="form-control" placeholder="Enter Phone Number" name="contact" id="contact" required>
+            <input type="number" class="form-control" placeholder="Enter Phone Number" name="contact" id="contact" required pattern="[6-9][0-9]{9}" title="Enter a valid 10-digit mobile number starting with 6,7,8, or 9" required>
         </div>
 
         <!-- city -->
      <div class="form-group">
-            <input type="text" class="form-control" placeholder="Enter city" name="city" id="city" required>
+            <input type="text" class="form-control" placeholder="Enter city" name="city" id="city" pattern="[A-Z][a-zA-Z\s]*" title="city name must start with a capital letter and contain only letters and spaces" required required>
         </div>
 
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Enter state" name="state" id="state" required>
+            <input type="text" class="form-control" placeholder="Enter state" name="state" id="state" pattern="[A-Z][a-zA-Z\s]*" title="state name must start with a capital letter and contain only letters and spaces" required>
         </div>
 
          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Enter street" name="street" id="street" required>
+            <input type="text" class="form-control" placeholder="Enter street" name="street" id="street" pattern="[A-Z][a-zA-Z\s]*" title="street name must start with a capital letter and contain only letters and spaces" required>
+        </div>
+
+        <div class="form-group">
+            <select name="districtid" id="districtid" class="form-control" required>
+                                <option value="">----- Select District -----</option>
+                                {% for l in dis %}
+                                <option value="{{l.districtid}}">{{l.districtname}}</option>
+                                {% endfor %}
+            </select>
         </div>
 
         <!-- Location -->
         <div class="form-group">
             <select name="locationid" id="locationid" class="form-control" required>
                                 <option value="">----- Select Location -----</option>
-                                {% for l in locs %}
-                                <option value="{{l.locationid}}">{{l.locationname}}</option>
-                                {% endfor %}
             </select>
         </div>
 
@@ -177,7 +183,7 @@ alert('location');
         </div>
 
          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Enter description" name="description" id="description" required>
+            <input type="text" class="form-control" placeholder="Enter description" name="description" id="description" pattern="[A-Z][a-zA-Z\s]*" title="description must start with a capital letter and contain only letters and spaces" required>
         </div>
        
 

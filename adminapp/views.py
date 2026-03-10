@@ -2,16 +2,55 @@ from itertools import count
 import datetime
 import json
 import os
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
 from userapp.models import tbl_booking, tbl_payment
 from adminapp.models import tbl_district, tbl_location, tbl_category
 from guestapp.models import tbl_company,tbl_login,user
 def adminhome(request):
-    revenue = tbl_payment.objects.filter(paymentstatus="Paid").aggregate(total_revenue=Count("totalamount"))["total_revenue"] or 0
+    revenue = tbl_payment.objects.filter(paymentstatus="Paid").aggregate(total_revenue=Sum("totalamount"))["total_revenue"] or 0
     total_bookings = tbl_booking.objects.count()
     return render(request, 'Admin/adminhome.html', {'revenue': revenue, 'total_bookings': total_bookings})
+
+def adminprofile(request):
+    loginid = request.session.get('loginid')
+    if loginid:
+        try:
+            admin_login = tbl_login.objects.get(loginid=loginid, role='admin')
+            return render(request, 'Admin/adminprofile.html', {'admin_login': admin_login})
+        except tbl_login.DoesNotExist:
+            return HttpResponse("<script>alert('Admin profile not found');window.location='/adminapp/adminhome/';</script>")
+    else:
+        return HttpResponse("<script>alert('Authentication Required Login first');window.location='/guestapp/login';</script>")
+
+def admin_changepassword(request):
+    loginid = request.session.get('loginid')
+    if loginid:
+        if request.method == 'POST':
+            current_password = request.POST.get('current_password')
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+
+            try:
+                admin_login = tbl_login.objects.get(loginid=loginid, role='admin')
+            except tbl_login.DoesNotExist:
+                return HttpResponse("<script>alert('Admin account not found');window.location='/adminapp/adminprofile/';</script>")
+
+            if admin_login.password != current_password:
+                return HttpResponse("<script>alert('Current password is incorrect');window.location='/adminapp/changepassword/';</script>")
+
+            if new_password != confirm_password:
+                return HttpResponse("<script>alert('New password and confirm password do not match');window.location='/adminapp/changepassword/';</script>")
+
+            admin_login.password = new_password
+            admin_login.save()
+            return HttpResponse("<script>alert('Password changed successfully');window.location='/adminapp/adminprofile/';</script>")
+
+        return render(request, 'Admin/changepassword.html')
+    else:
+        return HttpResponse("<script>alert('Authentication Required Login first');window.location='/guestapp/login';</script>")
+
 def district(request):
     return render(request, 'Admin/district.html')
 
@@ -22,10 +61,10 @@ def district_insert(request):
         dob=tbl_district()
         dob.districtname=distname
         if tbl_district.objects.filter(districtname=distname).exists():
-            return HttpResponse("<script>alert('District already exists');window.location='/district'</scrpit>")
+            return HttpResponse("<script>alert('District already exists');window.location='/adminapp/view_district/'</script>")
         else:
             dob.save()
-            return HttpResponse("<script>alert('Inserted successfully');window.location='/district'</script>")
+            return HttpResponse("<script>alert('Inserted successfully');window.location='/adminapp/view_district/'</script>")
 
 def view_district(request):
     district=tbl_district.objects.all()
@@ -383,3 +422,56 @@ def reportcategorycount_piechart(request):
         'labels': labels,
         'data': data,
     })
+def admin_logout(request):
+    request.session.flush()
+    return HttpResponse("<script>alert('Logged out successfully');window.location='/guestapp/login';</script>")
+def adminprofile(request):
+    loginid = request.session.get('loginid')
+    if loginid:
+        try:
+            admin_login = tbl_login.objects.get(loginid=loginid, role='admin')
+            return render(request, 'Admin/adminprofile.html', {'admin_login': admin_login})
+        except tbl_login.DoesNotExist:
+            return HttpResponse("<script>alert('Admin profile not found');window.location='/adminapp/adminhome/';</script>")
+def editadminprofile(request):
+    loginid=request.session.get('loginid')
+    if loginid:
+        admin_login=tbl_login.objects.get(loginid=loginid,role='admin')
+        if request.method=='POST':
+            username=request.POST.get('username')
+            admin_login.username=username
+            admin_login.save()
+            return HttpResponse("<script>alert('Profile updated successfully');window.location='/adminapp/adminprofile/';</script>")
+        else:
+            return HttpResponse("<script>alert('Request Error');window.location='/adminapp/adminprofile/';</script>")
+    else:
+        return HttpResponse("<script>alert('Authentication Required Login first');window.location='/guestapp/login';</script>")
+def admin_changepassword(request):
+    loginid=request.session.get('loginid')
+    if loginid:
+        if request.method=='POST':
+            current_password=request.POST.get('current_password')
+            new_password=request.POST.get('new_password')
+            confirm_password=request.POST.get('confirm_password')
+            try:
+                admin_login=tbl_login.objects.get(loginid=loginid,role='admin')
+            except tbl_login.DoesNotExist:
+                return HttpResponse("<script>alert('Admin account not found');window.location='/adminapp/adminprofile/';</script>")
+            if admin_login.password != current_password:
+                return HttpResponse("<script>alert('Current password is incorrect');window.location='/adminapp/changepassword/';</script>")
+            if new_password != confirm_password:
+                return HttpResponse("<script>alert('New password and confirm password do not match');window.location='/adminapp/changepassword/';</script>")
+            admin_login.password=new_password
+            admin_login.save()
+            return HttpResponse("<script>alert('Password changed successfully');window.location='/adminapp/adminprofile/';</script>")
+        else:
+            return HttpResponse("<script>alert('Request Error');window.location='/adminapp/adminprofile/';</script>")
+    else:
+        return HttpResponse("<script>alert('Authentication Required Login first');window.location='/guestapp/login';</script>")
+def editadminprofilepage(request):
+    loginid=request.session.get('loginid')
+    if loginid:
+        adminobj=tbl_login.objects.get(loginid=loginid,role='admin')
+        return render(request, 'Admin/editadminprofilepage.html', {'admin_login': adminobj})
+    else:
+        return HttpResponse("<script>alert('Authentication Required!Login first');window.location='/guestapp/login';</script>")

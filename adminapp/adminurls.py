@@ -3,6 +3,8 @@ from django.urls import path,include
 from . import views
 urlpatterns = [
     path('adminhome/',views.adminhome),
+    path('adminprofile/',views.adminprofile,name='adminprofile'),
+    path('changepassword/',views.admin_changepassword,name='admin_changepassword'),
     path('district/',views.district),
     path('district_insert/',views.district_insert,name='district_insert'),
     path('view_district/',views.view_district,name='view_district'),
@@ -32,4 +34,9 @@ urlpatterns = [
     path('datewisebookingreport_excel/',views.datewisebookingreport_excel,name='datewisebookingreport_excel'),
     path('reportcategorycount/',views.reportcategorycount,name='reportcategorycount'),
     path('reportcategorycount_piechart/',views.reportcategorycount_piechart,name='reportcategorycount_piechart'),
+    path('admin_logout/',views.admin_logout,name='admin_logout'),
+    path('adminprofile/',views.adminprofile,name='adminprofile'),
+    path('editadminprofile/',views.editadminprofile,name='editadminprofile'),
+    path('admin_changepassword/',views.admin_changepassword,name='admin_changepassword'),
+    path('editadminprofilepage/',views.editadminprofilepage,name='editadminprofilepage'),
 ]

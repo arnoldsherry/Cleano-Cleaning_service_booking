@@ -2,6 +2,10 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from adminapp.models import tbl_district,tbl_location
 from guestapp.models import user, tbl_login,tbl_company
+from userapp.models import tbl_booking,tbl_credit
+from email.message import EmailMessage 
+import smtplib
+from datetime import datetime
 
 # Create your views here.
 def guesthome(request):
@@ -32,6 +36,19 @@ def customerreg(request):
             tob.locationid = tbl_location.objects.get(locationid=request.POST.get("locationid"))
             tob.loginid = lob
             tob.save()
+            cob=tbl_credit()
+            cob.loginid=lob
+            cob.credit=0
+            cob.save()
+            Email=request.POST.get('email')  # to address
+            msg = EmailMessage()
+            msg.set_content('Thank you for registering with our cleaning service platform. Your registration has been successfully completed. We look forward to providing you with excellent service.  Best regards, The Cleano Team')
+            msg['Subject'] = "Registration Completed"
+            msg['from'] = 'cleanopth@gmail.com'  # Replace with your actual email
+            msg['To'] = {Email}
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+                smtp.login('cleanopth@gmail.com','qtqm nstt bqes haxb')  # Replace with your actual email and app password
+                smtp.send_message(msg)
 
             return HttpResponse("<script>alert('Successfully registered'); window.location='/Guest/customerreg';</script>")
          
@@ -58,8 +75,9 @@ def deletecustomer(request,customerid):
     cob.delete()
     return viewcustomer(request)
 def company(request):
+    districts=tbl_district.objects.all()
     locations=tbl_location.objects.all()
-    return render(request,'Guest/company.html',{'locs':locations})
+    return render(request,'Guest/company.html',{'locs':locations,'dis':districts})
 
 def companyreg(request):
     if request.method=='POST':
@@ -96,7 +114,17 @@ def companyreg(request):
             com_ob.image=image
             com_ob.description=request.POST.get("description")
             com_ob.save()
+            Email=request.POST.get('email')  # to address
+            msg = EmailMessage()
+            msg.set_content('Thank you for registering with our cleaning service platform. Your registration has been successfully completed. We look forward to providing you with excellent service.  Best regards, The Cleano Team')
+            msg['Subject'] = "Registration Completed"
+            msg['from'] = 'cleanopth@gmail.com'  # Replace with your actual email
+            msg['To'] = {email}
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+                smtp.login('cleanopth@gmail.com','qtqm nstt bqes haxb')  # Replace with your actual email and app password
+                smtp.send_message(msg)
             return HttpResponse("<script>alert('Company registered successfully');window.location='/Guest/companyreg';</script>")
+
 def login(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -107,7 +135,6 @@ def login(request):
             username=username,
             password=password,
             status=status,
-            role=role,
         )
 
         return redirect('login')
@@ -153,3 +180,7 @@ def login_insert(request):
     return HttpResponse(
         "<script>alert('Invalid request');window.location='/guestapp/login';</script>"
     )
+def filllocation(request):
+    districtid = int(request.POST.get("districtid"))
+    location = tbl_location.objects.filter(districtid=districtid).values()
+    return JsonResponse(list(location),safe=False)

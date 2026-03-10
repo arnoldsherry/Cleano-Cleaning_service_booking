@@ -12,4 +12,5 @@ urlpatterns = [
     path('companyreg/',views.companyreg,name='companyreg'),
     path('login/',views.login,name='login'),
     path('login_insert/',views.login_insert,name='login_insert'),
+    path('filllocation/',views.filllocation,name='filllocation'),
 ]

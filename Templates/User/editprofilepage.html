@@ -1,0 +1,88 @@
+{% load static %}
+{% include 'User/userheader.html' %}
+<script src="{% static 'jquery-3.7.1.min.js' %}"></script>
+
+<script>
+
+$(document).ready(function() {
+//alert('hii');
+    $.ajaxSetup({
+        headers: {"X-CSRFToken": '{{ csrf_token }}'}
+    });
+
+    $("#districtid").change(function() {
+        var districtid = $(this).val();
+        $('#locationid').html("<option value=''>Select location</option>");
+
+        $.ajax({
+            type: "POST",
+            url: '{% url "filllocation" %}',
+            data: {districtid: districtid},
+            dataType: "json",
+            success: function(data) {
+                // Populate locations for selected district
+                $.each(data, function(key, val) {
+                    var row = "<option value='" + val.locationid + "'>" + val.locationname + "</option>";
+                    $('#locationid').append(row);
+                });
+            },
+            error: function() {
+                $('#locationid').html("<option value=''>Unable to load locations</option>");
+            }
+        });
+    });
+});
+
+</script>
+<div class="container mt-5">
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="card-body text-center">
+            <!-- {% if user.image %}
+            <img src="{{ user.image.url }}" alt="{{ user.name }}" class="img-fluid rounded mb-3" style="max-height: 200px; object-fit: cover;">
+            {% else %}
+            <img src="{% static 'User/assets/images/profile/user-1.jpg' %}" alt="No image" class="img-fluid rounded mb-3" style="max-height: 200px; object-fit: cover;">
+            {% endif %} -->
+            <h4 class="card-title mb-4">Edit Profile</h4>
+            {% if success %}
+            <div class="alert alert-success" role="alert">
+                Profile edited successfully!
+            </div>
+            {% endif %}
+            <form method="post" action="{% url 'editprofile' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3 text-start">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" pattern="[A-Z][a-zA-Z\s]*" title="Name must start with a capital letter and contain only letters and spaces" >
+                </div>
+                <div class="mb-3 text-start">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" >
+                </div>
+                <div class="mb-3 text-start">
+                    <label for="contact" class="form-label">Contact</label>
+                    <input type="number" class="form-control" id="contact" name="contact" value="{{ user.contact }}" pattern="[6-9][0-9]{9}" title="Enter a valid 10-digit mobile number starting with 6,7,8, or 9">
+                </div>
+                 <div class="mb-3 text-start">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" >
+                </div>
+                <div class="mb-3 text-start">
+                    <label for="district" class="form-label">District</label>
+                    <select class="form-control" id="districtid" name="district" >
+                        <option value="">Select District</option>
+                        {% for district in districts %}
+                        <option value="{{district.districtid}}" {% if user.districtid.districtid == district.districtid %}selected{% endif %}>
+                            {{district.districtname}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 text-start">
+                    <label for="location" class="form-label">Location</label>
+                    <select class="form-control" id="locationid" name="location" value="{{ user.location }}" >
+                        <option value="">Select Location</option>
+                        <!-- Add more locations as needed -->
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>

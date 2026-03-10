@@ -14,23 +14,23 @@
                     {% csrf_token %}
                     <div class="mb-3">
                       <label for="exampleInputEmail1" class="form-label">Enter Service name</label>
-                      <input type="text" class="form-control" id="servicename" name="servicename" aria-describedby="emailHelp">
+                      <input type="text" class="form-control" id="servicename" name="servicename" aria-describedby="emailHelp" pattern="[A-Z][a-zA-Z\s]*" title="Name must start with a capital letter and contain only letters and spaces" required>
                     </div>
                     <div class="mb-3">
                       <label for="exampleInputPassword1" class="form-label">totalamount</label>
-                      <input type="number" class="form-control" id="totalamount" name="totalamount">
+                      <input type="number" class="form-control" id="totalamount" name="totalamount" required>
                     </div>
                      <div class="mb-3">
                       <label for="exampleInputPassword1" class="form-label">Upload image</label>
-                      <input type="file" class="form-control" id="image" name="image">
+                      <input type="file" class="form-control" id="image" name="image" required>
                     </div>
                     <div class="mb-3">
                       <label for="exampleInputPassword1" class="form-label">Enter description</label>
-                      <input type="text" class="form-control" id="desc" name="desc">
+                      <input type="text" class="form-control" id="desc" name="desc" required>
                     </div>
                      <div class="mb-3">
                       <label for="exampleInputPassword1" class="form-label">Enter category</label>
-                       <select class="form-select" id="categoryid" name="categoryid">
+                       <select class="form-select" id="categoryid" name="categoryid" required>
         <option selected>Choose</option>
         {% for c in cat %}
         <option value="{{c.categoryid}}">{{c.categoryname}}</option>

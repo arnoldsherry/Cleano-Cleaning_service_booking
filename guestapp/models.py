@@ -30,4 +30,5 @@ class tbl_company(models.Model):
     image=models.ImageField()
     description=models.CharField(max_length=200)
     status=models.CharField(max_length=50,default="In Queue")
+    email=models.CharField(max_length=50,default="")
     

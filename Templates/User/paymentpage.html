@@ -35,7 +35,16 @@
 					<strong>₹{{ booking.serviceid.totalamount }}</strong>
 				</div>
 			</div>
-
+			<div class="payment-form-container">
+				<h3>Select Payment method</h3>
+				<input type="radio" id="credit" name="payment_method" value="credit" required onchange="togglemethod('credit')">
+				<label for="credit">Pay with credit balance</label><br>
+				<input type="radio" id="card" name="payment_method" value="card" checked required onchange="togglemethod('card')">
+				<label for="card">Pay with card</label><br>
+				<input type="radio" id="upi" name="payment_method" value="upi" required onchange="togglemethod('upi')">
+				<label for="upi">Pay with UPI</label><br>
+			</div>
+			<div id="card-form" style="display: block;">
 			<form class="payment-form" method="post" action="{% url 'pay' %}">
 				{% csrf_token %}
 
@@ -62,9 +71,59 @@
 					</div>
 				</div>
 
-				<div class="form-group full">
-					<label for="upi">UPI ID (optional)</label>
-					<input id="upi" name="upi" type="text" placeholder="name@bank">
+				<input type="hidden" name="bookingid" value="{{booking.bookingid}}">
+				<input type="hidden" name="totalamount" value="{{booking.serviceid.totalamount}}">
+				<input type="hidden" name="paymentstatus" value="Paid">
+				<input type="hidden" name="paymentdate" value="{% now "Y-m-d" %}">
+				<div class="form-actions">
+					<button type="submit" class="btn-primary">Pay Now</button>
+					<a href="{% url 'mybookings' %}" class="btn-secondary">Cancel</a>
+				</div>
+
+				<p class="payment-note">
+					By proceeding, you agree to the payment terms. Your card details are encrypted.
+				</p>
+			</form>
+			</div>
+			<br>
+			<div id="upi-form" style="display:none;">
+			<form class="payment-form" method="post" action="{% url 'pay' %}">
+				{% csrf_token %}
+
+				<h3>pay with UPI</h3>
+				<div class="form-grid">
+					<div class="form-group full">
+						<label for="upiid">Enter UPI ID</label>
+						<input id="upiid" name="upi_id" type="text" required>
+					</div>
+
+				</div>
+				<input type="hidden" name="bookingid" value="{{booking.bookingid}}">
+				<input type="hidden" name="totalamount" value="{{booking.serviceid.totalamount}}">
+				<input type="hidden" name="paymentstatus" value="Paid">
+				<input type="hidden" name="paymentdate" value="{{pd}}">
+				<div class="form-actions">
+					<button type="submit" class="btn-primary">Pay Now</button>
+					<a href="{% url 'mybookings' %}" class="btn-secondary">Cancel</a>
+				</div>
+
+				<p class="payment-note">
+					By proceeding, you agree to the payment terms. Your card details are encrypted.
+				</p>
+			</form>
+			</div>
+			<br>
+			<div id="credit-form" style="display:none;">
+			<form class="payment-form" method="post" action="{% url 'paywithcreditbalance' booking.bookingid %}">
+				{% csrf_token %}
+
+				<h3>pay with credit balance</h3>
+				<div class="form-grid">
+					<div class="form-group full">
+						<label for="creditamount">Amount to pay</label>
+						<input id="creditamount" name="credit_amount" type="number" value="{{booking.serviceid.totalamount}}" required>
+					</div>
+
 				</div>
 				<input type="hidden" name="bookingid" value="{{booking.bookingid}}">
 				<input type="hidden" name="totalamount" value="{{booking.serviceid.totalamount}}">
@@ -79,10 +138,26 @@
 					By proceeding, you agree to the payment terms. Your card details are encrypted.
 				</p>
 			</form>
+			</div>
 		</div>
 	</div>
 </div>
-
+<script>
+	function togglemethod(method){
+		document.getElementById('card-form').style.display='none';
+		document.getElementById('upi-form').style.display='none';
+		document.getElementById('credit-form').style.display='none';
+		if (method=='card'){
+			document.getElementById('card-form').style.display='block';
+		}
+		else if (method=='upi'){
+			document.getElementById('upi-form').style.display='block';
+		}
+		else if (method=='credit'){
+			document.getElementById('credit-form').style.display='block';
+		}
+	}
+</script>
 <style>
 	.payment-portal {
 		min-height: calc(100vh - 120px);
